@@ -2,104 +2,61 @@ package repository
 
 import (
 	"fmt"
+	"net/http"
 	"q/handler"
 	"q/model"
+	"strconv"
+	"strings"
 	"time"
-)
 
-func AutoMigrate() {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
-	}
-	err1 := db.AutoMigrate(model.QueueModel{})
-	if err1 != nil {
-		panic(err1)
-	}
-}
+	"github.com/gin-gonic/gin"
+)
 
 //----------------------------------------------------------------------------
 
-func CreateQueue(genre string) {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
+func CreateQueue(c *gin.Context) {
+	// Validate input
+	var input model.QueueInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	newCode := GenerateCode(genre)
+	// Create Queue
+	newCode := GenerateCode(input.Type)
 	date := time.Now()
-	test := model.QueueModel{Code: newCode, Type: genre, Date: date}
-	db.Create(&test)
+	code := fmt.Sprintf("%v%03d", input.Type, newCode)
+
+	Queue := model.QueueModel{Code: code, Type: input.Type, Date: date}
+	model.DB.Create(&Queue)
+
+	c.JSON(http.StatusOK, gin.H{"data": Queue})
 }
 
-func GetQueuesByType(genre string) {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
-	}
-	tests := []model.QueueModel{}
-	db.Where("Type=?", genre).Find(&tests)
-	for _, t := range tests {
-		// fmt.Printf("%03d|%v|%v\n", t.Code, t.Type, t.Date)
-		fmt.Printf("%v%03d | %v\n", t.Type, t.Code, t.Date.Format("2006-02-01"))
-	}
-}
-
-// func GetAllQueues() {
+// func GetQueuesByType(genre string) {
 // 	db, err := handler.DB()
 // 	if err != nil {
 // 		panic(err)
 // 	}
-// 	returns := make([]model.QueueOp, 0)
 // 	tests := []model.QueueModel{}
-// 	db.Find(&tests)
-// 	var queue model.QueueOp
-// 	for rows.Next() {
-// 		if err := rows.Scan(&queue.Code, &queue.Type, &queue.Date); err != nil {
-// 			return returns, err
-// 		}
-// 		returns = append(returns, queue)
+// 	db.Where("Type=?", genre).Find(&tests)
+// 	tests2 := new(model.QueueOp)
+// 	for _, t := range tests {
+// 		A := fmt.Sprintf("%v%03d", t.Type, t.Code)
+// 		fmt.Printf("%v|%v|%v\n", A, t.Type, t.Date.Format("2006-02-01"))
+// 		tests2.ResponseQueues(A, t.Type, t.Date)
+
+// 		// fmt.Printf(`%v`, tests2)
+// 		// return tests2
+
 // 	}
-// 	fmt.Println(returns)
-// 	return returns, nil
-// 	// for _, t := range tests {
-
-// 	// 	A := fmt.Sprintf("%v%03d", t.Type, t.Code)
-// 	// 	fmt.Printf("%v|%v|%v\n", A, t.Type, t.Date.Format("2006-02-01"))
-// 	// StrCode = append(StrCode, A, t.Type, t.Date)
-
-// 	// fmt.Println("Code:",tests.StrCode)
-// 	// fmt.Println(StrCode)
-
+// 	// c.JSON(http.StatusOK, gin.H{"data": tests2})
 // }
 
-func GetAllQueues1() {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
-	}
+func GetAllQueues(c *gin.Context) {
 	tests := []model.QueueModel{}
-	db.Find(&tests)
-	for _, t := range tests {
-
-		A := fmt.Sprintf("%v%03d", t.Type, t.Code)
-		fmt.Printf("%v|%v|%v\n", A, t.Type, t.Date.Format("2006-02-01"))
-	}
+	model.DB.Find(&tests)
+	c.JSON(http.StatusOK, gin.H{"data": tests})
 }
-
-// returncustomers := make([]model.CustomerModel, 0)
-// execStr := fmt.Sprintf("exec SP_CustomerManagement @Process = N'%s'", "")
-// rows, err := db.Query(execStr)
-// if err != nil {
-// 	return nil, err
-// }
-// var customer model.CustomerModel
-// for rows.Next() {
-// 	if err := rows.Scan(&customer.Id, &customer.CustomerId, &customer.FirstName, &customer.LastName); err != nil {
-// 		return returncustomers, err
-// 	}
-// 	returncustomers = append(returncustomers, customer)
-// }
-// return returncustomers, nil
 
 func DeleteTest(id uint) {
 	db, err := handler.DB()
@@ -130,7 +87,9 @@ func GenerateCode(genre string) (NewCode int) {
 	// fmt.Println(now)
 
 	if last == now {
-		NewCode := queue.Code + 1
+		strCode := strings.Trim(queue.Code, genre)
+		intVar, _ := strconv.Atoi(strCode)
+		NewCode := intVar + 1
 		fmt.Println(NewCode)
 		return NewCode
 	}

@@ -5,18 +5,14 @@ import (
 )
 
 type QueueModel struct {
-	Code   int    `gorm:"size:5"`
+	Code   string `gorm:"size:5"`
 	Type   string `gorm:"size:2"`
+	Name   string `gorm:"size:16"`
+	Tel    string `gorm:"size:16"`
 	Date   time.Time
 	Status string `gorm:"size:20;default:Queue"`
 }
 
-type QueueOp struct {
-	Code string
-	Type string
-	Date time.Time
+type QueueInput struct {
+	Type string `gorm:"size:2"`
 }
-
-// func (Q QueueModel) StrCode() string {
-// 	return fmt.Sprintf("%v%03d", Q.Type, Q.Code)
-// }
