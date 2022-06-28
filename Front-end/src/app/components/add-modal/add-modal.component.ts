@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
+import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 import { WebAdminComponent } from '../web-admin/web-admin.component';
 
 @Component({
@@ -12,6 +13,7 @@ import { WebAdminComponent } from '../web-admin/web-admin.component';
 export class AddModalComponent implements OnInit {
   constructor(private modalService: NgbModal, private service: MasterService) {}
   @ViewChild('addModal') addview!: ElementRef;
+  @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
 
   tempData: PostQueue = {
     type: '',
@@ -30,16 +32,27 @@ export class AddModalComponent implements OnInit {
         (reason) => {}
       );
   }
-  createQueue(type: string) {
+  createQueue(type: string): string {
     this.tempData.type = type;
     console.log(this.tempData);
     this.service.createQueue(this.tempData).subscribe((result) => {
-      console.log(result);
+      if (result.message == 'Created') {
+        console.log(result);
+        console.log(result.data.Code);
+        alert(`${result.data.Code} has been created`);
+      }
+      return result.data.Code;
     });
+    return 'fail';
+  }
+  showData(code: string) {
+    this.viewDetail.getQueue(code);
   }
   save(code: string) {
+    let createdCode = '';
     console.log(code);
-    this.createQueue(code);
+    createdCode = this.createQueue(code);
     this.modalService.dismissAll();
+    this.viewDetail.getQueue(createdCode);
   }
 }
