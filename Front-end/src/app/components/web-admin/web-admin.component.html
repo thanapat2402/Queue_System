@@ -1,0 +1,27 @@
+<div class="container container-fluid pt-3">
+  <div class="text-end"><app-add-modal class="text-end"></app-add-modal></div>
+
+  <table class="table table-responsive table-strip text-center">
+    <thead>
+      <tr>
+        <th>Genre</th>
+        <th>Current</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of dataList">
+        <td>{{ item.type }}</td>
+        <td>{{ item.code }}</td>
+        <td>{{ item.timeStamp }}</td>
+        <td>
+          <button
+            class="btn btn-outline-success bi bi-clipboard-check me-3"
+          ></button>
+          <button class="btn btn-outline-danger bi bi-x"></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
