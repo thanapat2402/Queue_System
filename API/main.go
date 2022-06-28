@@ -15,8 +15,9 @@ func main() {
 
 	r.GET("/queues", repository.GetAllQueues)
 	r.GET("/queues/:Type", repository.GetQueuesByType)
-	r.POST("/queues", repository.CreateQueue)
-	r.DELETE("/queues/:Code", repository.DeleterealQueue)
+	r.GET("/queue/:Code", repository.GetQueuesByCode)
+	r.POST("/queue", repository.CreateQueue)
+	r.DELETE("/queue/:Code", repository.DeleterealQueue)
 
 	r.Run(":8086")
 }

@@ -29,7 +29,7 @@ func CreateQueue(c *gin.Context) {
 	Queue := model.QueueModel{Code: code, Type: input.Type, Date: date}
 	model.DB.Create(&Queue)
 
-	c.JSON(http.StatusOK, gin.H{"data": Queue})
+	c.JSON(http.StatusOK, gin.H{"data": Queue, "message": "Created"})
 }
 
 func GetAllQueues(c *gin.Context) {
@@ -41,28 +41,18 @@ func GetAllQueues(c *gin.Context) {
 func GetQueuesByType(c *gin.Context) {
 	// Get model if exist
 	queues := []model.QueueModel{}
-	if err := model.DB.Where("Type = ?", c.Param("Type")).Find(&queues).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
-		return
-	}
-
+	model.DB.Where("Type = ?", c.Param("Type")).Find(&queues)
 	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
-func DeleteQueues(Code uint) {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
+func GetQueuesByCode(c *gin.Context) {
+	// Get model if exist
+	queues := []model.QueueModel{}
+	if err := model.DB.Where("Code = ?", c.Param("Code")).First(&queues).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
 	}
-	db.Delete(&model.QueueModel{}, Code)
-}
-
-func DeleterealQueue2(Code uint) {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
-	}
-	db.Unscoped().Delete(&model.QueueModel{}, Code)
+	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
 func DeleterealQueue(c *gin.Context) {
@@ -74,7 +64,7 @@ func DeleterealQueue(c *gin.Context) {
 
 	model.DB.Where("Code = ?", c.Param("Code")).Delete(&queue)
 
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted"})
 }
 
 func GenerateCode(genre string) (NewCode int) {
@@ -83,7 +73,7 @@ func GenerateCode(genre string) (NewCode int) {
 		panic(err)
 	}
 	queue := model.QueueModel{}
-	db.Where("Type=?", genre).Last(&queue)
+	db.Where("Type=?", genre).Limit(1).Order("Date desc").Find(&queue)
 	last := queue.Date.Format("2006-02-01")
 	// fmt.Println(last)
 	now := time.Now().Format("2006-02-01")

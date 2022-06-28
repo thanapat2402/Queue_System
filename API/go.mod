@@ -3,22 +3,20 @@ module q
 go 1.18
 
 require (
+	github.com/gin-gonic/gin v1.8.1
 	gorm.io/driver/sqlserver v1.3.2
 	gorm.io/gorm v1.23.6
 )
 
 require (
 	github.com/denisenkom/go-mssqldb v0.12.0 // indirect
-	github.com/gin-contrib/cors v1.3.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
 	github.com/golang-sql/sqlexp v0.0.0-20170517235910-f1bb20e5a188 // indirect
-	github.com/golang/protobuf v1.5.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -33,6 +31,5 @@ require (
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/go-playground/validator.v9 v9.29.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
