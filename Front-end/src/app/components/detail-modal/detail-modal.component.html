@@ -1,0 +1,41 @@
+<ng-template #detail let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="add-modal">{{ tempData.Code }}</h4>
+    <button
+      type="button"
+      #closeBtn
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{
+        tempData.Code
+      }}"
+    />
+    <p class="m-3">{{ getDateTime(tempData.Date) }}</p>
+  </div>
+  <!-- <div class="modal-footer">
+      <button
+        style="display: none"
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="modal.close('Save click')"
+      >
+        Save
+      </button>
+    </div> -->
+</ng-template>
+
+<!-- <button
+  class="btn btn-outline-primary"
+  #popupbtn
+  id="popupbtn"
+  (click)="open()"
+>
+  Add Queue
+</button> -->
+<!-- 
+<hr /> -->

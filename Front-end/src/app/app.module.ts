@@ -6,10 +6,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WebAdminComponent } from './components/web-admin/web-admin.component';
 import { WebCustomerComponent } from './components/web-customer/web-customer.component';
 import { AddModalComponent } from './components/add-modal/add-modal.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DetailModalComponent } from './components/detail-modal/detail-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, WebAdminComponent, WebCustomerComponent, AddModalComponent],
-  imports: [BrowserModule, AppRoutingModule, NgbModule],
+  declarations: [
+    AppComponent,
+    WebAdminComponent,
+    WebCustomerComponent,
+    AddModalComponent,
+    DetailModalComponent,
+  ],
+  imports: [BrowserModule, AppRoutingModule, NgbModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })

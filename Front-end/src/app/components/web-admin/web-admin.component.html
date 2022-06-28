@@ -1,5 +1,18 @@
 <div class="container container-fluid pt-3">
-  <div class="text-end"><app-add-modal class="text-end"></app-add-modal></div>
+  <app-detail-modal></app-detail-modal>
+  <app-add-modal></app-add-modal>
+  <div class="text-end">
+    <button
+      class="btn btn-outline-primary"
+      #popupbtn
+      id="popupbtn"
+      (click)="open()"
+    >
+      Add Queue
+    </button>
+  </div>
+
+  <hr />
 
   <table class="table table-responsive table-strip text-center">
     <thead>
@@ -12,14 +25,18 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of dataList">
-        <td>{{ item.type }}</td>
-        <td>{{ item.code }}</td>
-        <td>{{ item.timeStamp }}</td>
+        <td>{{ item.Type }}</td>
+        <td>{{ item.Code }}</td>
+        <td>{{ getTimeString(item.Date) }}</td>
         <td>
           <button
             class="btn btn-outline-success bi bi-clipboard-check me-3"
+            (click)="showData(item.Code)"
           ></button>
-          <button class="btn btn-outline-danger bi bi-x"></button>
+          <button
+            class="btn btn-outline-danger bi bi-x"
+            (click)="deQueue(item.Code)"
+          ></button>
         </td>
       </tr>
     </tbody>
