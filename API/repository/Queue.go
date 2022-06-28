@@ -3,7 +3,6 @@ package repository
 import (
 	"fmt"
 	"net/http"
-	"q/handler"
 	"q/model"
 	"strconv"
 	"strings"
@@ -68,12 +67,8 @@ func DeleterealQueue(c *gin.Context) {
 }
 
 func GenerateCode(genre string) (NewCode int) {
-	db, err := handler.DB()
-	if err != nil {
-		panic(err)
-	}
 	queue := model.QueueModel{}
-	db.Where("Type=?", genre).Limit(1).Order("Date desc").Find(&queue)
+	model.DB.Where("Type=?", genre).Limit(1).Order("Date desc").Find(&queue)
 	last := queue.Date.Format("2006-02-01")
 	// fmt.Println(last)
 	now := time.Now().Format("2006-02-01")

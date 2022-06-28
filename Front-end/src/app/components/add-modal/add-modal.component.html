@@ -1,0 +1,75 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Queue</h4>
+    <button
+      type="button"
+      #closeBtn
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body text-center">
+    <table class="mx-auto">
+      <tbody class="">
+        <tr class="text-center">
+          <td>
+            <button
+              class="btn btn-outline-success btn-input"
+              (click)="save('A')"
+            >
+              1 person
+            </button>
+          </td>
+          <td>
+            <button
+              class="btn btn-outline-success btn-input"
+              (click)="save('B')"
+            >
+              2 people
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button
+              class="btn btn-outline-success btn-input"
+              (click)="save('C')"
+            >
+              3-4 people
+            </button>
+          </td>
+          <td>
+            <button
+              class="btn btn-outline-success btn-input"
+              (click)="save('D')"
+            >
+              5-6 people
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <div class="modal-footer">
+    <button
+      style="display: none"
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Save
+    </button>
+  </div> -->
+</ng-template>
+
+<button
+  class="btn btn-outline-primary"
+  #popupbtn
+  id="popupbtn"
+  (click)="open()"
+>
+  Add Queue
+</button>
+
+<hr />
