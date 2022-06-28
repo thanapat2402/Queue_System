@@ -32,46 +32,49 @@ func CreateQueue(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": Queue})
 }
 
-// func GetQueuesByType(genre string) {
-// 	db, err := handler.DB()
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	tests := []model.QueueModel{}
-// 	db.Where("Type=?", genre).Find(&tests)
-// 	tests2 := new(model.QueueOp)
-// 	for _, t := range tests {
-// 		A := fmt.Sprintf("%v%03d", t.Type, t.Code)
-// 		fmt.Printf("%v|%v|%v\n", A, t.Type, t.Date.Format("2006-02-01"))
-// 		tests2.ResponseQueues(A, t.Type, t.Date)
-
-// 		// fmt.Printf(`%v`, tests2)
-// 		// return tests2
-
-// 	}
-// 	// c.JSON(http.StatusOK, gin.H{"data": tests2})
-// }
-
 func GetAllQueues(c *gin.Context) {
-	tests := []model.QueueModel{}
-	model.DB.Find(&tests)
-	c.JSON(http.StatusOK, gin.H{"data": tests})
+	queues := []model.QueueModel{}
+	model.DB.Find(&queues)
+	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
-func DeleteTest(id uint) {
+func GetQueuesByType(c *gin.Context) {
+	// Get model if exist
+	queues := []model.QueueModel{}
+	if err := model.DB.Where("Type = ?", c.Param("Type")).Find(&queues).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": queues})
+}
+
+func DeleteQueues(Code uint) {
 	db, err := handler.DB()
 	if err != nil {
 		panic(err)
 	}
-	db.Delete(&model.QueueModel{}, id)
+	db.Delete(&model.QueueModel{}, Code)
 }
 
-func DeleterealTest(id uint) {
+func DeleterealQueue2(Code uint) {
 	db, err := handler.DB()
 	if err != nil {
 		panic(err)
 	}
-	db.Unscoped().Delete(&model.QueueModel{}, id)
+	db.Unscoped().Delete(&model.QueueModel{}, Code)
+}
+
+func DeleterealQueue(c *gin.Context) {
+	var queue model.QueueModel
+	if err := model.DB.Where("Code = ?", c.Param("Code")).First(&queue).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	model.DB.Where("Code = ?", c.Param("Code")).Delete(&queue)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
 
 func GenerateCode(genre string) (NewCode int) {
