@@ -11,8 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//----------------------------------------------------------------------------
-
+//Create new Queue
 func CreateQueue(c *gin.Context) {
 	// Validate input
 	var input model.QueueInput
@@ -20,32 +19,32 @@ func CreateQueue(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// Create Queue
 	newCode := GenerateCode(input.Type)
 	date := time.Now()
 	code := fmt.Sprintf("%v%03d", input.Type, newCode)
-
+	// Create Queue
 	Queue := model.QueueModel{Code: code, Type: input.Type, Date: date}
 	model.DB.Create(&Queue)
 
 	c.JSON(http.StatusOK, gin.H{"data": Queue, "message": "Created"})
 }
 
+//Get All Queues
 func GetAllQueues(c *gin.Context) {
 	queues := []model.QueueModel{}
-	model.DB.Find(&queues)
+	model.DB.Order("Date").Find(&queues)
 	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
+//Get by Type
 func GetQueuesByType(c *gin.Context) {
-	// Get model if exist
 	queues := []model.QueueModel{}
-	model.DB.Where("Type = ?", c.Param("Type")).Find(&queues)
+	model.DB.Where("Type = ?", c.Param("Type")).Order("Date").Find(&queues)
 	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
+//Get a queue by code
 func GetQueuesByCode(c *gin.Context) {
-	// Get model if exist
 	queues := []model.QueueModel{}
 	if err := model.DB.Where("Code = ?", c.Param("Code")).First(&queues).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -54,7 +53,9 @@ func GetQueuesByCode(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
-func DeleterealQueue(c *gin.Context) {
+//Delete a queue
+func DeleteQueue(c *gin.Context) {
+	// Get model if exist
 	var queue model.QueueModel
 	if err := model.DB.Where("Code = ?", c.Param("Code")).First(&queue).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -66,6 +67,7 @@ func DeleterealQueue(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted"})
 }
 
+//Gen Runningnumber
 func GenerateCode(genre string) (NewCode int) {
 	queue := model.QueueModel{}
 	model.DB.Where("Type=?", genre).Limit(1).Order("Date desc").Find(&queue)

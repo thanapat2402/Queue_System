@@ -9,6 +9,8 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
+
+	//Set Data source name
 	dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
 	dial := sqlserver.Open(dsn)
 

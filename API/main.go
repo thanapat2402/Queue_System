@@ -5,19 +5,26 @@ import (
 
 	"q/repository"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
-
+	route := gin.Default()
+	route.Use(cors.Default())
+	//connect to database + auto migrate
 	model.ConnectDatabase()
 
-	r.GET("/queues", repository.GetAllQueues)
-	r.GET("/queues/:Type", repository.GetQueuesByType)
-	r.GET("/queue/:Code", repository.GetQueuesByCode)
-	r.POST("/queue", repository.CreateQueue)
-	r.DELETE("/queue/:Code", repository.DeleterealQueue)
+	//Routes
+	q := route.Group("/api/v1/queue")
+	{
+		q.GET("/", repository.GetAllQueues)
+		q.GET("/:Type", repository.GetQueuesByType)
+		q.GET("/code/:Code", repository.GetQueuesByCode)
+		q.POST("/", repository.CreateQueue)
+		q.DELETE("/:Code", repository.DeleteQueue)
+	}
 
-	r.Run(":8086")
+	//Run Server
+	route.Run(":8086")
 }
