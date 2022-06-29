@@ -45,6 +45,7 @@ export class DetailModalComponent implements OnInit {
   getDateTime(input: string) {
     const date = new Date(input).toLocaleDateString('th');
     const time = new Date(input).toLocaleTimeString('th');
+
     return `Date: ${date} Time: ${time}`;
   }
 

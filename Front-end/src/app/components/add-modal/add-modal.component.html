@@ -1,64 +1,109 @@
 <ng-template #addModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="add-modal">Add New Queue</h4>
-    <button
-      type="button"
-      #closeBtn
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body text-center">
-    <table class="mx-auto">
-      <tbody class="">
-        <tr class="text-center">
-          <td>
-            <button
-              class="btn btn-outline-success btn-input"
-              (click)="save('A')"
-            >
-              1 person
-            </button>
-          </td>
-          <td>
-            <button
-              class="btn btn-outline-success btn-input"
-              (click)="save('B')"
-            >
-              2 people
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button
-              class="btn btn-outline-success btn-input"
-              (click)="save('C')"
-            >
-              3-4 people
-            </button>
-          </td>
-          <td>
-            <button
-              class="btn btn-outline-success btn-input"
-              (click)="save('D')"
-            >
-              5-6 people
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!-- <div class="modal-footer">
-    <button
-      style="display: none"
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="modal.close('Save click')"
-    >
-      Save
-    </button>
-  </div> -->
+  <form [formGroup]="queueForm" (ngSubmit)="save()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="add-modal">Add New Queue</h4>
+      <button
+        type="button"
+        #closeBtn
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="name">Name</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          aria-label="name"
+          aria-describedby="name"
+          formControlName="name"
+        />
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="tel">Telephone </span>
+        </div>
+        <input
+          type="tel"
+          class="form-control"
+          aria-label="tel"
+          aria-describedby="tel"
+          name="tel"
+          formControlName="tel"
+        />
+      </div>
+
+      <div
+        class="text-center"
+        ngbRadioGroup
+        formControlName="type"
+        name="type"
+        role="group"
+      >
+        <table class="mx-auto">
+          <tbody>
+            <tr>
+              <td>
+                <label ngbButtonLabel class="btn-outline-success btn-input"
+                  ><input
+                    ngbButton
+                    class="btn-check"
+                    name="type"
+                    value="A"
+                    type="radio"
+                  />
+                  1 person</label
+                >
+              </td>
+              <td>
+                <label ngbButtonLabel class="btn-outline-success btn-input"
+                  ><input
+                    ngbButton
+                    class="btn-check btn-input"
+                    name="type"
+                    value="B"
+                    type="radio"
+                  />
+                  2 people</label
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label ngbButtonLabel class="btn-outline-success btn-input"
+                  ><input
+                    ngbButton
+                    class="btn-check btn-input"
+                    name="type"
+                    value="C"
+                    type="radio"
+                  />
+                  3-4 people</label
+                >
+              </td>
+              <td>
+                <label ngbButtonLabel class="btn-outline-success btn-input"
+                  ><input
+                    ngbButton
+                    class="btn-check btn-input"
+                    name="type"
+                    value="D"
+                    type="radio"
+                  />
+                  5-6 people</label
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-success">Add</button>
+    </div>
+  </form>
 </ng-template>

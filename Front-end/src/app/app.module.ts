@@ -8,6 +8,7 @@ import { WebCustomerComponent } from './components/web-customer/web-customer.com
 import { AddModalComponent } from './components/add-modal/add-modal.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailModalComponent } from './components/detail-modal/detail-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,13 @@ import { DetailModalComponent } from './components/detail-modal/detail-modal.com
     AddModalComponent,
     DetailModalComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, NgbModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

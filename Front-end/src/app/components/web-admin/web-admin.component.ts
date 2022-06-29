@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
 import { MOCKUP } from 'src/app/data/mockData';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
@@ -13,13 +13,16 @@ import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 export class WebAdminComponent implements OnInit {
   //dataList = MOCKUP;
   dataList: any;
-  tempData: PostQueue = { type: '' };
+  tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
   detail: any;
   @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
   @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
   constructor(private service: MasterService) {
     this.getQueues();
+    this.service.RefreshRequired.subscribe((result) => {
+      this.getQueues();
+    });
   }
 
   showData(code: string) {

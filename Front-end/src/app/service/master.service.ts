@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpResult } from '../models/http';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { HttpResponse, PostQueue, Queue } from '../models/queue';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MasterService {
+  private _refreshRequired = new Subject<void>();
+
+  get RefreshRequired() {
+    return this._refreshRequired;
+  }
   subscribeInstant: any;
   constructor(private http: HttpClient) {}
   getQueue(code: string): Observable<HttpResult<Queue[]>> {
@@ -26,7 +31,13 @@ export class MasterService {
   }
   //CreateQueue
   createQueue(payload: PostQueue): Observable<HttpResult<HttpResponse>> {
-    this.subscribeInstant = this.http.post(`${environment.baseApi}`, payload);
+    this.subscribeInstant = this.http
+      .post(`${environment.baseApi}`, payload)
+      .pipe(
+        tap(() => {
+          this._refreshRequired.next();
+        })
+      );
     return this.subscribeInstant;
   }
   //deleteQueue
