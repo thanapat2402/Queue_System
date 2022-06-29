@@ -1,4 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
@@ -11,15 +17,25 @@ import { WebAdminComponent } from '../web-admin/web-admin.component';
   styleUrls: ['./add-modal.component.css'],
 })
 export class AddModalComponent implements OnInit {
-  constructor(private modalService: NgbModal, private service: MasterService) {}
+  constructor(
+    private modalService: NgbModal,
+    private service: MasterService,
+    private formBuilder: FormBuilder
+  ) {}
   @ViewChild('addModal') addview!: ElementRef;
   @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
 
   tempData: PostQueue = {
     type: '',
+    name: '',
+    tel: '',
   };
   ngOnInit(): void {}
-
+  queueForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    tel: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+  });
   open() {
     this.modalService
       .open(this.addview, {
@@ -48,11 +64,19 @@ export class AddModalComponent implements OnInit {
   showData(code: string) {
     this.viewDetail.getQueue(code);
   }
-  save(code: string) {
-    let createdCode = '';
-    console.log(code);
-    createdCode = this.createQueue(code);
+  save() {
+    console.log(this.queueForm.value);
+    this.service
+      .createQueue(this.queueForm.getRawValue())
+      .subscribe((result) => {
+        console.log(result);
+      });
+    this.queueForm.setValue({ type: '', tel: '', name: '' });
     this.modalService.dismissAll();
-    this.viewDetail.getQueue(createdCode);
+    // let createdCode = '';
+    // console.log(code);
+    // createdCode = this.createQueue(code);
+    // this.modalService.dismissAll();
+    // this.viewDetail.getQueue(createdCode);
   }
 }
