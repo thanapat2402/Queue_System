@@ -6,9 +6,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var DB *gorm.DB
-
-func ConnectDatabase() {
+func ConnectDatabase() (db *gorm.DB) {
 
 	//Set Data source name
 	dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
@@ -21,6 +19,5 @@ func ConnectDatabase() {
 	}
 
 	database.AutoMigrate(&QueueModel{})
-
-	DB = database
+	return database
 }
