@@ -7,8 +7,26 @@ import (
 	"strings"
 	"time"
 
+	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
+
+func ConnectDatabase() (db *gorm.DB) {
+
+	//Set Data source name
+	dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
+	dial := sqlserver.Open(dsn)
+
+	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
+
+	if err != nil {
+		panic("Failed to connect to database!")
+	}
+	//auto migration
+	database.AutoMigrate(&model.QueueModel{})
+	return database
+}
 
 type queueRepositoryDB struct {
 	db *gorm.DB
@@ -56,16 +74,15 @@ func (r queueRepositoryDB) DeleteQueue(code string) (*model.QueueModel, error) {
 }
 
 func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
-	var input model.QueueInput
-	newCode := r.generateCode(input.Type)
+	newCode := r.generateCode(data.Type)
 	date := time.Now()
-	code := fmt.Sprintf("%v%03d", input.Type, newCode)
+	code := fmt.Sprintf("%v%03d", data.Type, newCode)
 	Queue := model.QueueModel{
 		Code: code,
-		Type: input.Type,
+		Type: data.Type,
 		Date: date,
-		Name: input.Name,
-		Tel:  input.Tel}
+		Name: data.Name,
+		Tel:  data.Tel}
 	r.db.Create(&Queue)
 	return &Queue, nil
 }

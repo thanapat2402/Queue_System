@@ -4,7 +4,6 @@ import (
 	"q/model"
 )
 
-
 //port
 type QueueService interface {
 	GetQueues() ([]model.QueueResponse, error)

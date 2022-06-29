@@ -31,14 +31,14 @@ type QueueRepository interface {
 // 	c.JSON(http.StatusOK, gin.H{"data": Queue, "message": "Created"})
 // }
 
-// //Get All Queues
+//Get All Queues
 // func GetAllQueues(c *gin.Context) {
 // 	queues := []model.QueueModel{}
 // 	model.DB.Order("Date").Find(&queues)
 // 	c.JSON(http.StatusOK, gin.H{"data": queues})
 // }
 
-// //Get by Type
+//Get by Type
 // func GetQueuesByType(c *gin.Context) {
 // 	queues := []model.QueueModel{}
 // 	model.DB.Where("Type = ?", c.Param("Type")).Order("Date").Find(&queues)
