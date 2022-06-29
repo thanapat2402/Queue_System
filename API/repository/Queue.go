@@ -23,7 +23,7 @@ func CreateQueue(c *gin.Context) {
 	date := time.Now()
 	code := fmt.Sprintf("%v%03d", input.Type, newCode)
 	// Create Queue
-	Queue := model.QueueModel{Code: code, Type: input.Type, Date: date}
+	Queue := model.QueueModel{Code: code, Type: input.Type, Date: date, Name: input.Name, Tel: input.Tel}
 	model.DB.Create(&Queue)
 
 	c.JSON(http.StatusOK, gin.H{"data": Queue, "message": "Created"})

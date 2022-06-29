@@ -17,6 +17,7 @@ func main() {
 
 	//Routes
 	q := route.Group("/api/v1/queue")
+	
 	{
 		q.GET("/", repository.GetAllQueues)
 		q.GET("/:Type", repository.GetQueuesByType)
