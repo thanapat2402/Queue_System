@@ -16,3 +16,9 @@ export interface QueueDetail {
   barCode?: string;
   timestamp: string;
 }
+
+export interface HttpResponse {
+  Code: string;
+  Date: string;
+  Type: string;
+}

@@ -1,9 +1,15 @@
 <div class="container container-fluid pt-3">
   <app-detail-modal></app-detail-modal>
   <app-add-modal></app-add-modal>
-  <div class="text-end">
+  <div class="nav navbar navbar-light justify-content-between">
+    <a
+      ><img
+        class="logo navbar-brand"
+        src="https://upload.wikimedia.org/wikipedia/en/thumb/5/59/ThaiBevLogo.svg/1200px-ThaiBevLogo.svg.png"
+    /></a>
+
     <button
-      class="btn btn-outline-primary"
+      class="btn btn-outline-success"
       #popupbtn
       id="popupbtn"
       (click)="open()"
@@ -17,7 +23,7 @@
   <table class="table table-responsive table-strip text-center">
     <thead>
       <tr>
-        <th>Genre</th>
+        <th>Type</th>
         <th>Current</th>
         <th>Time</th>
         <th>Action</th>

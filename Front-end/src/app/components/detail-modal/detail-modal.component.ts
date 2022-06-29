@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Queue, QueueDetail } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
+import { WebAdminComponent } from '../web-admin/web-admin.component';
 
 @Component({
   selector: 'app-detail-modal',
@@ -11,6 +12,7 @@ import { MasterService } from 'src/app/service/master.service';
 export class DetailModalComponent implements OnInit {
   constructor(private modalService: NgbModal, private service: MasterService) {}
   @ViewChild('detail') viewDetail!: ElementRef;
+  @ViewChild(WebAdminComponent) admin!: WebAdminComponent;
 
   tempData: any;
   queueDetail: QueueDetail = {

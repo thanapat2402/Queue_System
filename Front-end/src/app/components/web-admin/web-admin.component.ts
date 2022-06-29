@@ -31,20 +31,12 @@ export class WebAdminComponent implements OnInit {
     if (code) {
       this.service.getQueues(code).subscribe((result) => {
         console.log(result);
-        // if (result.message === 'successful') {
-        //   console.log('hi');
-        //   this.dataList = result.data;
-        // }
         this.dataList = result.data;
         console.log(this.dataList);
       });
     } else {
       this.service.getQueues().subscribe((result) => {
         console.log(result);
-        // if (result.message === 'successful') {
-        //   console.log('hi');
-        //   this.dataList = result.data;
-        // }
         this.dataList = result.data;
         console.log(this.dataList);
       });
@@ -64,11 +56,11 @@ export class WebAdminComponent implements OnInit {
   clearList(list: any) {
     list = [{}];
   }
-  open = async () => {
+  open() {
     this.addQueue.open();
     this.clearList(this.dataList);
     this.getQueues();
-  };
+  }
   getTimeString(date: string) {
     return new Date(date).toLocaleTimeString('th');
   }

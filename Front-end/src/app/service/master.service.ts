@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpResult } from '../models/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { PostQueue, Queue } from '../models/queue';
+import { HttpResponse, PostQueue, Queue } from '../models/queue';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class MasterService {
     return this.subscribeInstant;
   }
   //CreateQueue
-  createQueue(payload: PostQueue): Observable<HttpResult<string>> {
+  createQueue(payload: PostQueue): Observable<HttpResult<HttpResponse>> {
     this.subscribeInstant = this.http.post(`${environment.baseApi}`, payload);
     return this.subscribeInstant;
   }

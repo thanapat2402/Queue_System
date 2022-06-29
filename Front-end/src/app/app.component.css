@@ -1,4 +1,8 @@
 .nav {
-  background: #00833f;
+  /* background: #00833f; */
   height: 3em;
+}
+.logo {
+  height: 2em;
+  margin: auto;
 }
