@@ -63,5 +63,5 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": queue})
+	c.JSON(http.StatusOK, gin.H{"data": queue,"message":"deleted"})
 }

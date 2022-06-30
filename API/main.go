@@ -8,18 +8,22 @@ package main
 
 import (
 	"q/handler"
+	"q/model"
 	"q/repository"
 	"q/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/sqlserver"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
 	route := gin.Default()
 	route.Use(cors.Default())
 	//connect to database + auto migrate
-	db := repository.ConnectDatabase()
+	db := ConnectDatabase()
 
 	queueRepo := repository.NewQueueRepositoryDB(db)
 	queueService := service.NewQueueService(queueRepo)
@@ -56,3 +60,19 @@ func main() {
 // 	// fmt.Println(All)
 
 // }
+
+func ConnectDatabase() (db *gorm.DB) {
+
+	//Set Data source name
+	dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
+	dial := sqlserver.Open(dsn)
+
+	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
+
+	if err != nil {
+		panic("Failed to connect to database!")
+	}
+	//auto migration
+	database.AutoMigrate(&model.QueueModel{})
+	return database
+}
