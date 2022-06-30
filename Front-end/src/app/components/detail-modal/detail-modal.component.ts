@@ -35,8 +35,8 @@ export class DetailModalComponent implements OnInit {
   }
   getQueue(code: string) {
     this.service.getQueue(code).subscribe((result) => {
-      console.log(result.data[0]);
-      this.tempData = result.data[0];
+      console.log(result.data);
+      this.tempData = result.data;
     });
     this.open();
     //console.log(this.getDateTime(this.tempData.timeStamp));
