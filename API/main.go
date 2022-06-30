@@ -1,11 +1,5 @@
 package main
 
-// import (
-// 	"fmt"
-// 	"q/repository"
-// 	"q/service"
-// )
-
 import (
 	"q/handler"
 	"q/model"
@@ -43,23 +37,6 @@ func main() {
 	//Run Server
 	route.Run(":8086")
 }
-
-// func main() {
-// 	db := repository.ConnectDatabase()
-
-// 	queueRepo := repository.NewQueueRepositoryDB(db)
-// 	queueService := service.NewQueueService(queueRepo)
-
-// 	queues, err := queueService.GetQueues()
-// 	// queues, err := queueService.GetQueue("A011")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	fmt.Println(queues)
-// 	// All,_ := queueRepo.GetAllQueues()
-// 	// fmt.Println(All)
-
-// }
 
 func ConnectDatabase() (db *gorm.DB) {
 
