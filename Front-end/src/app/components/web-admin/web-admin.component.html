@@ -1,21 +1,45 @@
 <div class="container container-fluid pt-3">
   <app-detail-modal></app-detail-modal>
   <app-add-modal></app-add-modal>
+
   <div class="nav navbar navbar-light justify-content-between">
-    <a
-      ><img
+    <a href="/">
+      <img
         class="logo navbar-brand"
         src="https://upload.wikimedia.org/wikipedia/en/thumb/5/59/ThaiBevLogo.svg/1200px-ThaiBevLogo.svg.png"
-    /></a>
-
-    <button
-      class="btn btn-outline-success"
-      #popupbtn
-      id="popupbtn"
-      (click)="open()"
-    >
-      Add Queue
-    </button>
+      />
+    </a>
+    <div ngbDropdown class="d-inline-block">
+      <button
+        type="button"
+        class="btn btn-outline-success"
+        id="dropdown1"
+        ngbDropdownToggle
+      >
+        Select Type
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdown1">
+        <!-- items as buttons -->
+        <button ngbDropdownItem (click)="getQueues()">All</button>
+        <button ngbDropdownItem (click)="getQueues('A')">A</button>
+        <button ngbDropdownItem (click)="getQueues('B')">B</button>
+        <button ngbDropdownItem (click)="getQueues('C')">C</button>
+        <button ngbDropdownItem (click)="getQueues('D')">D</button>
+      </div>
+    </div>
+    <div class="btn-group me-3">
+      <button
+        class="btn btn-outline-success"
+        #popupbtn
+        id="popupbtn"
+        (click)="open()"
+      >
+        Add Queue
+      </button>
+      <!-- <button class="btn btn-outline-danger" (click)="clearQueue()">
+        Clear Queues
+      </button> -->
+    </div>
   </div>
 
   <hr />
