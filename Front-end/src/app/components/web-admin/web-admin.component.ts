@@ -59,6 +59,13 @@ export class WebAdminComponent implements OnInit {
   clearList(list: any) {
     list = [{}];
   }
+  clearQueue() {
+    if (confirm('Are you sure to clear all queues?')) {
+      this.dataList.forEach((item: any) => {
+        this.deQueue(item.Code);
+      });
+    }
+  }
   open() {
     this.addQueue.open();
     this.clearList(this.dataList);
