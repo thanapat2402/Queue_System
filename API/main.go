@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"q/handler"
 	"q/model"
 	"q/repository"
@@ -8,12 +9,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 func main() {
+	initConfig()
 	route := gin.Default()
 	route.Use(cors.Default())
 	//connect to database + auto migrate
@@ -37,12 +40,18 @@ func main() {
 
 	//Run Server
 	route.Run(":8086")
+	// route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
 }
 
 func ConnectDatabase() (db *gorm.DB) {
 
 	//Set Data source name
-	dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
+	// dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
+	dsn := fmt.Sprintf("server=%v\\%v;Database=%v;praseTime=true",
+		viper.GetString("db.server"),
+		viper.GetString("db.driver"),
+		viper.GetString("db.database"),
+	)
 	dial := sqlserver.Open(dsn)
 
 	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
@@ -53,4 +62,15 @@ func ConnectDatabase() (db *gorm.DB) {
 	//auto migration
 	database.AutoMigrate(&model.QueueModel{})
 	return database
+}
+
+func initConfig() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
 }
