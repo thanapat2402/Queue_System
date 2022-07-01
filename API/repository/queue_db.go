@@ -38,8 +38,10 @@ func (r queueRepositoryDB) GetQueuesByType(types string) ([]model.QueueModel, er
 
 func (r queueRepositoryDB) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
-	code, _ := strconv.Atoi(strings.TrimLeft(strcode, "ABCD"))
-	err := r.db.Where("Code = ?", code).First(&queue).Error
+	num := strings.TrimLeft(strcode, "ABCD")
+	code, _ := strconv.Atoi(num)
+	Type := strings.Trim(strcode, num)
+	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
 	if err != nil {
 		return nil, err
 	}
