@@ -20,22 +20,23 @@ func NewQueueRepositoryMock() *queueRepositoryMock {
 
 func (r *queueRepositoryMock) GetAllQueues() ([]model.QueueModel, error) {
 	args := r.Called()
+	print(args)
 	return args.Get(0).([]model.QueueModel), args.Error(1)
 }
 
-func (r queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel, error) {
+func (r *queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel, error) {
 	args := r.Called(types)
 	qOutput := []model.QueueModel{}
 	queues := args.Get(0).([]model.QueueModel)
-	for _, queues := range queues {
-		if queues.Type == types {
-			qOutput = append(qOutput, queues)
+	for _, queue := range queues {
+		if queue.Type == types {
+			qOutput = append(qOutput, queue)
 		}
 	}
 	return qOutput, nil
 }
 
-func (r queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+func (r *queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	args := r.Called(name, types)
 	queues := args.Get(0).([]model.QueueModel)
 	for _, queues := range queues {
@@ -46,7 +47,7 @@ func (r queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) 
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
+func (r *queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
 	args := r.Called(strcode)
 	queues := args.Get(0).([]model.QueueModel)
 
@@ -61,7 +62,7 @@ func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel,
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, error) {
+func (r *queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, error) {
 	args := r.Called(strcode)
 	queues := args.Get(0).([]model.QueueModel)
 
@@ -77,7 +78,7 @@ func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, err
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
+func (r *queueRepositoryMock) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
 	date := time.Now()
 	Queue := model.QueueModel{
 		Code: 1,
