@@ -44,6 +44,15 @@ func (r queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel, 
 	return qOutput, nil
 }
 
+func (r queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+	for _, queues := range r.queues {
+		if queues.Name == name && queues.Type == types {
+			return &queues, nil
+		}
+	}
+	return nil, errors.New("record not found")
+}
+
 func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)

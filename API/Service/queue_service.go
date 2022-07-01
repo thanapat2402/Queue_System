@@ -61,6 +61,21 @@ func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error)
 	return qReponses, nil
 }
 
+func (s queueService) SearchQueue(name string, types string) (*model.QueueResponse, error) {
+	queue, err := s.queueRepo.SearchQueuesByNameTypes(name, types)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	qReponse := model.QueueResponse{
+		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
+		Date: queue.Date,
+		Name: queue.Name,
+		Tel:  queue.Tel,
+	}
+	return &qReponse, nil
+}
+
 func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.GetQueuesByCode(code)
 	if err != nil {

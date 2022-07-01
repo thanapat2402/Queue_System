@@ -6,6 +6,8 @@ import (
 	"q/model"
 	"q/repository"
 	"q/service"
+	"strings"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -16,6 +18,7 @@ import (
 )
 
 func main() {
+	initTimeZone()
 	initConfig()
 	route := gin.Default()
 	route.Use(cors.Default())
@@ -34,19 +37,18 @@ func main() {
 		q.GET("/", queueHandler.GetQueues)
 		q.GET("/:Type", queueHandler.GetQueuesType)
 		q.GET("/code/:Code", queueHandler.GetQueue)
+		q.GET("/search", queueHandler.SearchQueue)
 		q.POST("/", queueHandler.AddQueue)
 		q.DELETE("/:Code", queueHandler.DeQueue)
 	}
 
 	//Run Server
-	route.Run(":8086")
-	// route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
+	route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
 }
 
 func ConnectDatabase() (db *gorm.DB) {
 
 	//Set Data source name
-	// dsn := "server=localhost\\SQLEXPRESS;Database=QueueSystem;praseTime=true"
 	dsn := fmt.Sprintf("server=%v\\%v;Database=%v;praseTime=true",
 		viper.GetString("db.server"),
 		viper.GetString("db.driver"),
@@ -68,9 +70,19 @@ func initConfig() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
 	}
+}
+
+func initTimeZone() {
+	ict, err := time.LoadLocation("Asia/Bangkok")
+	if err != nil {
+		panic(err)
+	}
+	time.Local = ict
 }

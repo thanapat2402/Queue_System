@@ -36,6 +36,15 @@ func (r queueRepositoryDB) GetQueuesByType(types string) ([]model.QueueModel, er
 	return queues, nil
 }
 
+func (r queueRepositoryDB) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+	queue := model.QueueModel{}
+	err := r.db.Where("Name = ? AND Type = ?", name, types).First(&queue).Error
+	if err != nil {
+		return nil, err
+	}
+	return &queue, nil
+}
+
 func (r queueRepositoryDB) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
 	num := strings.TrimLeft(strcode, "ABCD")
