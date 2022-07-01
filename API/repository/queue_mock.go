@@ -54,14 +54,13 @@ func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel,
 	return nil, errors.New("record not found")
 }
 
-// func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, error) {
-// 	return nil, nil
-// }
-
 func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, error) {
-	code, _ := strconv.Atoi(strings.TrimLeft(strcode, "ABCD"))
+	num := strings.TrimLeft(strcode, "ABCD")
+	code, _ := strconv.Atoi(num)
+	Type := strings.Trim(strcode, num)
+
 	for _, queues := range r.queues {
-		if queues.Code == code {
+		if queues.Code == code && queues.Type == Type { //sep type
 			return &queues, nil
 		}
 	}
