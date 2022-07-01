@@ -23,10 +23,10 @@ func main() {
 	route := gin.Default()
 	route.Use(cors.Default())
 	//connect to database + auto migrate
-	db := ConnectDatabase()
+	// db := ConnectDatabase()
 
-	queueRepo := repository.NewQueueRepositoryDB(db)
-	// queueRepo := repository.NewQueueRepositoryMock()
+	// queueRepo := repository.NewQueueRepositoryDB(db)
+	queueRepo := repository.NewQueueRepositoryMock()
 	queueService := service.NewQueueService(queueRepo)
 	queueHandler := handler.NewQueueHandler(queueService)
 

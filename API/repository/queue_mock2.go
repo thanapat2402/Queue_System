@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-type queueRepositoryMock struct {
+type queueRepositoryMock2 struct {
 	queues []model.QueueModel
 }
 
-func NewQueueRepositoryMock() QueueRepository {
+func NewQueueRepositoryMock2() QueueRepository {
 	queues := []model.QueueModel{
 		{
 			Code: 4,
@@ -27,14 +27,14 @@ func NewQueueRepositoryMock() QueueRepository {
 			Name: "Steven",
 			Tel:  "191"},
 	}
-	return queueRepositoryMock{queues: queues}
+	return queueRepositoryMock2{queues: queues}
 }
 
-func (r queueRepositoryMock) GetAllQueues() ([]model.QueueModel, error) {
+func (r queueRepositoryMock2) GetAllQueues() ([]model.QueueModel, error) {
 	return r.queues, nil
 }
 
-func (r queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel, error) {
+func (r queueRepositoryMock2) GetQueuesByType(types string) ([]model.QueueModel, error) {
 	qOutput := []model.QueueModel{}
 	for _, queues := range r.queues {
 		if queues.Type == types {
@@ -44,7 +44,7 @@ func (r queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel, 
 	return qOutput, nil
 }
 
-func (r queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+func (r queueRepositoryMock2) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	for _, queues := range r.queues {
 		if queues.Name == name && queues.Type == types {
 			return &queues, nil
@@ -53,7 +53,7 @@ func (r queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) 
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
+func (r queueRepositoryMock2) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
 	Type := strings.Trim(strcode, num)
@@ -65,7 +65,7 @@ func (r queueRepositoryMock) GetQueuesByCode(strcode string) (*model.QueueModel,
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, error) {
+func (r queueRepositoryMock2) DeleteQueue(strcode string) (*model.QueueModel, error) {
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
 	Type := strings.Trim(strcode, num)
@@ -78,7 +78,7 @@ func (r queueRepositoryMock) DeleteQueue(strcode string) (*model.QueueModel, err
 	return nil, errors.New("record not found")
 }
 
-func (r queueRepositoryMock) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
+func (r queueRepositoryMock2) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
 	date := time.Now()
 	Queue := model.QueueModel{
 		Code: 1,
