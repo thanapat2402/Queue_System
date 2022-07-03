@@ -24,11 +24,11 @@ func main() {
 	route.Use(cors.Default())
 
 	//connect to database + auto migrate
-	// db := ConnectDatabase()
-	// queueRepo := repository.NewQueueRepositoryDB(db)
+	db := ConnectDatabase()
+	queueRepo := repository.NewQueueRepositoryDB(db)
 
 	//Use Mock Data Repository to test
-	queueRepo := repository.NewQueueRepositoryMock()
+	// queueRepo := repository.NewQueueRepositoryMock() 
 	// queueRepo := repository.NewQueueRepositoryMock2()
 
 	queueService := service.NewQueueService(queueRepo)
