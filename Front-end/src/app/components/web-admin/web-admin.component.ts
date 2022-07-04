@@ -16,7 +16,7 @@ export class WebAdminComponent implements OnInit {
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
   detail: any;
-  // @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
+  @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
   @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
   constructor(private service: MasterService) {
     this.getQueues();
@@ -25,9 +25,9 @@ export class WebAdminComponent implements OnInit {
     });
   }
 
-  // showData(code: string) {
-  //   this.viewDetail.getQueue(code);
-  // }
+  showData(code: string) {
+    this.viewDetail.getQueue(code);
+  }
   //getQueues
   getQueues(code?: string) {
     console.log(code);
