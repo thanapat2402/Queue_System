@@ -16,7 +16,7 @@ export class WebAdminComponent implements OnInit {
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
   detail: any;
-  @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
+  // @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
   @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
   constructor(private service: MasterService) {
     this.getQueues();
@@ -25,9 +25,9 @@ export class WebAdminComponent implements OnInit {
     });
   }
 
-  showData(code: string) {
-    this.viewDetail.getQueue(code);
-  }
+  // showData(code: string) {
+  //   this.viewDetail.getQueue(code);
+  // }
   //getQueues
   getQueues(code?: string) {
     console.log(code);
@@ -49,7 +49,8 @@ export class WebAdminComponent implements OnInit {
     if (confirm(`Do you want to delete ${code}?`)) {
       this.service.deleteQueue(code).subscribe((result) => {
         console.log(result);
-        if (result.message === 'Deleted') {
+        if (result.message === 'deleted') {
+          console.log(result.data);
           alert(`${code} has been deleted`);
           this.getQueues();
         }
@@ -57,7 +58,7 @@ export class WebAdminComponent implements OnInit {
     }
   }
   clearList(list: any) {
-    list = [{}];
+    list = [];
   }
   clearQueue() {
     if (confirm('Are you sure to clear all queues?')) {

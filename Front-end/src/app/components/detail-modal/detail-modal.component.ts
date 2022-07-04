@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Queue, QueueDetail } from 'src/app/models/queue';
+import { DateAndTime, Queue, QueueDetail } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
 import { WebAdminComponent } from '../web-admin/web-admin.component';
 
@@ -42,11 +42,11 @@ export class DetailModalComponent implements OnInit {
     //console.log(this.getDateTime(this.tempData.timeStamp));
   }
 
-  getDateTime(input: string) {
+  getDateTime(input: string): DateAndTime {
     const date = new Date(input).toLocaleDateString('th');
     const time = new Date(input).toLocaleTimeString('th');
 
-    return `Date: ${date} Time: ${time}`;
+    return { date: date, time: time };
   }
 
   ngOnInit(): void {}

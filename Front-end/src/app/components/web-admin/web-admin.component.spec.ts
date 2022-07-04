@@ -8,9 +8,8 @@ describe('WebAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WebAdminComponent ]
-    })
-    .compileComponents();
+      declarations: [WebAdminComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,8 @@ describe('WebAdminComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('should clear the list', () => {
+    expect(component.clearList([1, 2, 3, 4, 5])).toBe();
   });
 });

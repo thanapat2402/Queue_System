@@ -1,0 +1,9 @@
+.container {
+  white-space: inherit;
+  overflow-wrap: break-word;
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+}
+.btn-action {
+  color: #00833f;
+}

@@ -16,28 +16,38 @@
       }}"
       class="mb-3"
     />
-    <p class="mb-3" *ngIf="tempData.Name">Name: {{ tempData.Name }}</p>
-    <p class="mb-3" *ngIf="tempData.Tel">Tel: {{ tempData.Tel }}</p>
-    <p class="mb-3">{{ getDateTime(tempData.Date) }}</p>
+    <p class="mb-3" *ngIf="tempData.Name">
+      <strong>Name: </strong> {{ tempData.Name }}
+    </p>
+    <p class="mb-3" *ngIf="tempData.Tel">
+      <strong>Tel:</strong> {{ tempData.Tel }}
+    </p>
+    <p class="mb-3">
+      <strong>Date: </strong>{{ getDateTime(tempData.Date).date }}
+      <strong> Time: </strong>{{ getDateTime(tempData.Date).time }}
+    </p>
   </div>
-  <!-- <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="deQueue(tempData.Code)"
-    >
-      Save
-    </button>
-  </div> -->
 </ng-template>
+<!-- <style>
+  .container {
+    white-space: inherit;
+    overflow-wrap: break-word;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+  }
+  .btn-action {
+    outline: none !important;
+    color: #00833f;
+  }
+</style>
+<ng-template #detail let-modal>
+  <div class="modal-body text-center container">
+    <h4 ngbAutofocus>Header</h4>
+    <p>
+      Leasdaldmaslcalwadmaslcmlaswdascsacascasdfasdfasfaefnaeklfaekfnaekfnkaeknfaasasdasdfasdfasefefasdad
+    </p>
 
-<!-- <button
-  class="btn btn-outline-primary"
-  #popupbtn
-  id="popupbtn"
-  (click)="open()"
->
-  Add Queue
-</button> -->
-<!-- 
-<hr /> -->
+    <button class="btn btn-action me-3">Action</button>
+    <button class="btn btn-success">Action</button>
+  </div>
+</ng-template> -->

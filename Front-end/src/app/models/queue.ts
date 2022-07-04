@@ -28,3 +28,8 @@ export interface HttpResponse {
   Name: string;
   Tel: string;
 }
+
+export interface DateAndTime {
+  date: string;
+  time: string;
+}
