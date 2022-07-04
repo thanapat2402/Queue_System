@@ -8,6 +8,7 @@ import (
 type QueueService interface {
 	GetQueues() ([]model.QueuesResponse, error)
 	GetQueuesType(Type string) ([]model.QueuesResponse, error)
+	SearchQueue(name string, types string) (*model.QueueResponse, error)
 	GetQueue(Code string) (*model.QueueResponse, error)
 	AddQueue(data model.QueueInput) (*model.QueueResponse, error)
 	DeQueue(Code string) (*model.QueueResponse, error)

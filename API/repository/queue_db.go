@@ -36,18 +36,34 @@ func (r queueRepositoryDB) GetQueuesByType(types string) ([]model.QueueModel, er
 	return queues, nil
 }
 
-func (r queueRepositoryDB) GetQueuesByCode(code string) (*model.QueueModel, error) {
+func (r queueRepositoryDB) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
-	err := r.db.Where("Code = ?", code).First(&queue).Error
+	err := r.db.Where("Name = ? AND Type = ?", name, types).First(&queue).Error
 	if err != nil {
 		return nil, err
 	}
 	return &queue, nil
 }
 
-func (r queueRepositoryDB) DeleteQueue(code string) (*model.QueueModel, error) {
+func (r queueRepositoryDB) GetQueuesByCode(strcode string) (*model.QueueModel, error) {
+	queue := model.QueueModel{}
+	num := strings.TrimLeft(strcode, "ABCD")
+	code, _ := strconv.Atoi(num)
+	Type := strings.Trim(strcode, num)
+	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
+	if err != nil {
+		return nil, err
+	}
+	return &queue, nil
+}
+
+func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error) {
 	var queue model.QueueModel
-	err := r.db.Where("Code = ?", code).First(&queue).Error
+	num := strings.TrimLeft(strcode, "ABCD")
+	code, _ := strconv.Atoi(num)
+	Type := strings.Trim(strcode, num)
+	// code, _ := strconv.Atoi(strings.TrimLeft(strcode, "ABCD"))
+	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +74,8 @@ func (r queueRepositoryDB) DeleteQueue(code string) (*model.QueueModel, error) {
 func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
 	newCode := r.generateCode(data.Type)
 	date := time.Now()
-	code := fmt.Sprintf("%v%03d", data.Type, newCode)
 	Queue := model.QueueModel{
-		Code: code,
+		Code: newCode,
 		Type: data.Type,
 		Date: date,
 		Name: data.Name,
@@ -73,18 +88,12 @@ func (r queueRepositoryDB) generateCode(genre string) (NewCode int) {
 	queue := model.QueueModel{}
 	r.db.Where("Type=?", genre).Limit(1).Order("Date desc").Find(&queue)
 	last := queue.Date.Format("2006-02-01")
-	// fmt.Println(last)
 	now := time.Now().Format("2006-02-01")
-	// fmt.Println(now)
-
 	if last == now {
-		strCode := strings.Trim(queue.Code, genre)
-		intVar, _ := strconv.Atoi(strCode)
-		NewCode := intVar + 1
+		NewCode := queue.Code + 1
 		fmt.Println(NewCode)
 		return NewCode
 	}
-
 	NewCode = 1
 	fmt.Println(NewCode)
 	return NewCode

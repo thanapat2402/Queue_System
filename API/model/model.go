@@ -5,7 +5,7 @@ import (
 )
 
 type QueueModel struct {
-	Code string `gorm:"size:5"`
+	Code int `gorm:"size:5"`
 	Type string `gorm:"size:2"`
 	Date time.Time
 	Name string `gorm:"size:30"`

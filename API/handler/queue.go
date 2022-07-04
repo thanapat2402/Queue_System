@@ -34,6 +34,17 @@ func (h queueHandler) GetQueuesType(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": queues})
 }
 
+func (h queueHandler) SearchQueue(c *gin.Context) {
+	name := c.Query("name")
+	types := c.Query("types")
+	queues, err := h.qService.SearchQueue(name, types)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": queues})
+}
+
 func (h queueHandler) GetQueue(c *gin.Context) {
 	queue, err := h.qService.GetQueue(c.Param("Code"))
 	if err != nil {
@@ -54,7 +65,7 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": queue})
+	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Created"})
 }
 
 func (h queueHandler) DeQueue(c *gin.Context) {
@@ -63,5 +74,5 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": queue,"message":"deleted"})
+	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted"})
 }

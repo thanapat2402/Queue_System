@@ -1,0 +1,7 @@
+app:
+  port: 8086
+
+db:
+  server: localhost
+  driver: SQLEXPRESS
+  database: QueueSystem

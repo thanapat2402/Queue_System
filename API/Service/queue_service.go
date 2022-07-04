@@ -3,6 +3,7 @@ package service
 //Business logic
 
 import (
+	"fmt"
 	"log"
 	"q/model"
 	"q/repository"
@@ -23,11 +24,10 @@ func (s queueService) GetQueues() ([]model.QueuesResponse, error) {
 		log.Panicln(err)
 		return nil, err
 	}
-
 	qReponses := []model.QueuesResponse{}
 	for _, queue := range queues {
 		qReponse := model.QueuesResponse{
-			Code: queue.Code,
+			Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
 			Date: queue.Date,
 			Type: queue.Type,
 			Name: queue.Name,
@@ -49,7 +49,7 @@ func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error)
 	qReponses := []model.QueuesResponse{}
 	for _, queue := range queues {
 		qReponse := model.QueuesResponse{
-			Code: queue.Code,
+			Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
 			Date: queue.Date,
 			Type: queue.Type,
 			Name: queue.Name,
@@ -61,6 +61,21 @@ func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error)
 	return qReponses, nil
 }
 
+func (s queueService) SearchQueue(name string, types string) (*model.QueueResponse, error) {
+	queue, err := s.queueRepo.SearchQueuesByNameTypes(name, types)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	qReponse := model.QueueResponse{
+		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
+		Date: queue.Date,
+		Name: queue.Name,
+		Tel:  queue.Tel,
+	}
+	return &qReponse, nil
+}
+
 func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.GetQueuesByCode(code)
 	if err != nil {
@@ -68,7 +83,7 @@ func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 		return nil, err
 	}
 	qReponse := model.QueueResponse{
-		Code: queue.Code,
+		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
 		Date: queue.Date,
 		Name: queue.Name,
 		Tel:  queue.Tel,
@@ -82,8 +97,9 @@ func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, err
 		log.Println(err)
 		return nil, err
 	}
+	code := fmt.Sprintf("%v%03d", queue.Type, queue.Code)
 	qReponse := model.QueueResponse{
-		Code: queue.Code,
+		Code: code,
 		Date: queue.Date,
 		Name: queue.Name,
 		Tel:  queue.Tel,
@@ -98,7 +114,7 @@ func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {
 		return nil, err
 	}
 	qReponse := model.QueueResponse{
-		Code: queue.Code,
+		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
 		Date: queue.Date,
 		Name: queue.Name,
 		Tel:  queue.Tel,
