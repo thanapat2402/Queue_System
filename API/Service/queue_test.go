@@ -166,7 +166,7 @@ func TestSearchQueue(t *testing.T) {
 
 }
 
-func TestGetQueue(t *testing.T) {
+func TestGetQueueBasic(t *testing.T) {
 	//Arrange
 	queueRepo := repository.NewQueueRepositoryMock()
 	Code := "A003"
@@ -188,6 +188,46 @@ func TestGetQueue(t *testing.T) {
 
 	//Assert
 	assert.Equal(t, expected, read)
+
+}
+
+func TestGetQueue(t *testing.T) {
+
+	type testcase struct {
+		name     string
+		code     string
+		model    model.QueueModel
+		Expected model.QueueResponse
+	}
+
+	cases := []testcase{
+		{name: "applie A003",
+			code:     "A003",
+			model:    model.QueueModel{Code: 3, Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
+			Expected: model.QueueResponse{Code: "A003", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
+		},
+		{name: "applie A004",
+			code:     "A004",
+			model:    model.QueueModel{Code: 4, Type: "A", Date: time.Date(2022, time.September, 10, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "0856727284"},
+			Expected: model.QueueResponse{Code: "A004", Date: time.Date(2022, time.September, 10, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "0856727284"},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			//Arrange
+			queueRepo := repository.NewQueueRepositoryMock()
+			queueRepo.On("GetQueuesByCode", c.code).Return(&c.model, nil)
+
+			queueService := service.NewQueueService(queueRepo)
+			//Act
+			read, _ := queueService.GetQueue(c.code)
+			expected := &c.Expected
+
+			//Assert
+			assert.Equal(t, expected, read)
+		})
+	}
 
 }
 
