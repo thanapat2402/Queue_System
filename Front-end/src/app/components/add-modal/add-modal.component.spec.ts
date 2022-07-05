@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AddModalComponent } from './add-modal.component';
 
@@ -8,9 +10,10 @@ describe('AddModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddModalComponent ]
-    })
-    .compileComponents();
+      imports: [HttpClientTestingModule, ReactiveFormsModule],
+
+      declarations: [AddModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
