@@ -48,19 +48,7 @@ export class AddModalComponent implements OnInit {
         (reason) => {}
       );
   }
-  createQueue(type: string): string {
-    this.tempData.type = type;
-    console.log(this.tempData);
-    this.service.createQueue(this.tempData).subscribe((result) => {
-      if (result.message == 'Created') {
-        console.log(result);
-        console.log(result.data.Code);
-        alert(`${result.data.Code} has been created`);
-      }
-      return result.data.Code;
-    });
-    return 'fail';
-  }
+
   showData(code: string) {
     this.viewDetail.getQueue(code);
   }
@@ -70,6 +58,12 @@ export class AddModalComponent implements OnInit {
       .createQueue(this.queueForm.getRawValue())
       .subscribe((result) => {
         console.log(result);
+        if (result.message == 'Created') {
+          console.log('Hi');
+          console.log(result.data.Code);
+          alert(`${result.data.Code} has been created`);
+        }
+        return result.data.Code;
       });
     this.queueForm.setValue({ type: '', tel: '', name: '' });
     this.modalService.dismissAll();

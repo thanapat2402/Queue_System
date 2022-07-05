@@ -12,7 +12,7 @@ import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 })
 export class WebAdminComponent implements OnInit {
   //dataList = MOCKUP;
-  dataList: any;
+  dataList: any = [];
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
   detail: any;
@@ -49,7 +49,7 @@ export class WebAdminComponent implements OnInit {
     if (confirm(`Do you want to delete ${code}?`)) {
       this.service.deleteQueue(code).subscribe((result) => {
         console.log(result);
-        if (result.message === 'deleted') {
+        if (result.message === 'Deleted') {
           console.log(result.data);
           alert(`${code} has been deleted`);
           this.getQueues();

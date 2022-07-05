@@ -6,3 +6,4 @@ API/handler/db.go
 API/model/setup.go
 API/repository/queue_db.go
 API/config.yaml
+API/config.yaml
