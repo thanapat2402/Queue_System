@@ -28,7 +28,7 @@ func main() {
 	queueRepo := repository.NewQueueRepositoryDB(db)
 
 	//Use Mock Data Repository to test
-	// queueRepo := repository.NewQueueRepositoryMock() 
+	// queueRepo := repository.NewQueueRepositoryMock()
 	// queueRepo := repository.NewQueueRepositoryMock2()
 
 	queueService := service.NewQueueService(queueRepo)
