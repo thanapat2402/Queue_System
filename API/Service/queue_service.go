@@ -42,7 +42,7 @@ func (s queueService) GetQueues() ([]model.QueuesResponse, error) {
 func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error) {
 	queues, err := s.queueRepo.GetQueuesByType(Type)
 	if err != nil {
-		// log.Panicln(err)
+		log.Println(err)
 		return nil, ErrRepository
 	}
 
@@ -64,8 +64,8 @@ func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error)
 func (s queueService) SearchQueue(name string, types string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.SearchQueuesByNameTypes(name, types)
 	if err != nil {
-		log.Panic(ErrRepository)
-		return nil, err
+		log.Println(err)
+		return nil, ErrRepository
 	}
 	qReponse := model.QueueResponse{
 		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
@@ -79,8 +79,8 @@ func (s queueService) SearchQueue(name string, types string) (*model.QueueRespon
 func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.GetQueuesByCode(code)
 	if err != nil {
-		log.Panic(ErrRepository)
-		return nil, err
+		log.Println(err)
+		return nil, ErrRepository
 	}
 	qReponse := model.QueueResponse{
 		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
@@ -94,8 +94,8 @@ func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.CreateQueue(data)
 	if err != nil {
-		log.Panic(ErrRepository)
-		return nil, err
+		log.Println(err)
+		return nil, ErrRepository
 	}
 	code := fmt.Sprintf("%v%03d", queue.Type, queue.Code)
 	qReponse := model.QueueResponse{
@@ -110,8 +110,8 @@ func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, err
 func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.DeleteQueue(code)
 	if err != nil {
-		log.Panic(ErrRepository)
-		return nil, err
+		log.Println(err)
+		return nil, ErrRepository
 	}
 	qReponse := model.QueueResponse{
 		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),

@@ -59,7 +59,6 @@ func TestGetAllQueues(t *testing.T) {
 
 		//Act
 		read, _ := queueService.GetQueues()
-		// println(read)
 		expected := []model.QueuesResponse{
 			{Code: "A003", Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
 			{Code: "A004", Type: "A", Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "1112"},
@@ -72,7 +71,7 @@ func TestGetAllQueues(t *testing.T) {
 	t.Run("Error Repository", func(t *testing.T) {
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("GetAllQueues").Return([]model.QueueModel{}, errors.New(""))
+		queueRepo.On("GetAllQueues").Return([]model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
 		//Act
@@ -91,46 +90,27 @@ func TestGetByType(t *testing.T) {
 		queueRepo := repository.NewQueueRepositoryMock()
 		types := "A"
 		queueRepo.On("GetQueuesByType", types).Return([]model.QueueModel{
-			{
-				Code: 3,
-				Type: "A",
-				Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC),
-				Name: "Golf",
-				Tel:  "1150"},
-			{
-				Code: 4,
-				Type: "A",
-				Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
-				Name: "Nop",
-				Tel:  "1112"},
+			{Code: 3, Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
+			{Code: 4, Type: "A", Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "1112"},
 		}, nil)
 
 		queueService := service.NewQueueService(queueRepo)
 		//Act
 		read, _ := queueService.GetQueuesType(types)
 		expected := []model.QueuesResponse{
-			{
-				Code: "A003",
-				Type: "A",
-				Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC),
-				Name: "Golf",
-				Tel:  "1150"},
-			{
-				Code: "A004",
-				Type: "A",
-				Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
-				Name: "Nop",
-				Tel:  "1112"},
+			{Code: "A003", Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
+			{Code: "A004", Type: "A", Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "1112"},
 		}
 
 		//Assert
 		assert.Equal(t, expected, read)
+
 	})
 	t.Run("Error Repository", func(t *testing.T) {
 		types := "A"
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("GetQueuesByType", types).Return([]model.QueueModel{}, errors.New(""))
+		queueRepo.On("GetQueuesByType", types).Return([]model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
 		//Act
@@ -138,7 +118,7 @@ func TestGetByType(t *testing.T) {
 
 		//Assert
 		assert.ErrorIs(t, err, service.ErrRepository)
-		// assert.PanicsWithValue(t, service.ErrRepository.Error(), func() { queueService.GetQueues() }, "The code did not panic")
+
 	})
 
 }
@@ -150,7 +130,6 @@ func TestSearchQueue(t *testing.T) {
 		types := "A"
 		name := "Nop"
 		queueRepo.On("SearchQueuesByNameTypes", name, types).Return(&model.QueueModel{
-
 			Code: 4,
 			Type: "A",
 			Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
@@ -175,11 +154,15 @@ func TestSearchQueue(t *testing.T) {
 		name := "Nop"
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("SearchQueuesByNameTypes", name, types).Return(&model.QueueModel{}, errors.New(""))
+		queueRepo.On("SearchQueuesByNameTypes", name, types).Return(&model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
+		//Act
+		_, err := queueService.SearchQueue(name, types)
+
 		//Assert
-		assert.PanicsWithValue(t, service.ErrRepository.Error(), func() { queueService.SearchQueue(name, types) }, "The code did not panic")
+		assert.ErrorIs(t, err, service.ErrRepository)
+
 	})
 
 }
@@ -250,11 +233,15 @@ func TestGetQueue(t *testing.T) {
 		code := "A008"
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("GetQueuesByCode", code).Return(&model.QueueModel{}, errors.New(""))
+		queueRepo.On("GetQueuesByCode", code).Return(&model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
+		//Act
+		_, err := queueService.GetQueue(code)
+
 		//Assert
-		assert.PanicsWithValue(t, service.ErrRepository.Error(), func() { queueService.GetQueue(code) }, "The code did not panic")
+		assert.ErrorIs(t, err, service.ErrRepository)
+
 	})
 
 }
@@ -293,11 +280,15 @@ func TestCreateQueue(t *testing.T) {
 		data := model.QueueInput{}
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("CreateQueue", data).Return(&model.QueueModel{}, errors.New(""))
+		queueRepo.On("CreateQueue", data).Return(&model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
+		//Act
+		_, err := queueService.AddQueue(data)
+
 		//Assert
-		assert.PanicsWithValue(t, service.ErrRepository.Error(), func() { queueService.AddQueue(data) }, "The code did not panic")
+		assert.ErrorIs(t, err, service.ErrRepository)
+
 	})
 
 }
@@ -331,11 +322,15 @@ func TestDeQueue(t *testing.T) {
 		code := "A008"
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("DeleteQueue", code).Return(&model.QueueModel{}, errors.New(""))
+		queueRepo.On("DeleteQueue", code).Return(&model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
+		//Act
+		_, err := queueService.DeQueue(code)
+
 		//Assert
-		assert.PanicsWithValue(t, service.ErrRepository.Error(), func() { queueService.DeQueue(code) }, "The code did not panic")
+		assert.ErrorIs(t, err, service.ErrRepository)
+
 	})
 
 }
