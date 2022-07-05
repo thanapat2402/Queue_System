@@ -54,7 +54,7 @@ func TestGetQueues(t *testing.T) {
 
 	})
 
-	t.Run("Error", func(t *testing.T) {
+	t.Run("Error Service", func(t *testing.T) {
 		//Arrange
 		responseService := []model.QueuesResponse{}
 		queueService := service.NewQueueServiceMock()
@@ -76,37 +76,76 @@ func TestGetQueues(t *testing.T) {
 
 }
 
-// func TestGetQueuesType(t *testing.T) {
-// 	t.Run("success", func(t *testing.T) {
-// 		//Arrange
-// 		responseRepo := []model.QueuesResponse{
-// 			{Code: "A003", Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
-// 			{Code: "A004", Type: "A", Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "1112"},
-// 		}
+func TestGetQueuesType(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		//Arrange
+		types := "A"
+		responseRepo := []model.QueuesResponse{
+			{Code: "A003", Type: "A", Date: time.Date(2020, time.April, 10, 21, 34, 01, 0, time.UTC), Name: "Golf", Tel: "1150"},
+			{Code: "A004", Type: "A", Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC), Name: "Nop", Tel: "1112"},
+		}
 
-// 		// expected := `{"data:[{"Code": "A003", "Type": "A", "Date": "2020-04-10T21:34:01Z, "Name": "Golf", "Tel": "1150"},{"Code": "A004", "Type": "A", "Date": "2020-04-11T21:34:01Z, "Name": "Nop", "Tel": "1112"},{"Code": "B005", "Type": "B", "Date": "2020-04-12T21:34:05Z, "Name": "Steven", "Tel": "191"},]"}`
-// 		// data := fmt.Sprintf(`{"data":%v}`, expected)
-// 		queueService := service.NewQueueServiceMock()
-// 		queueService.On("GetQueuesType", "A").Return(responseRepo, nil)
+		// expected := `{"data:[{"Code": "A003", "Type": "A", "Date": "2020-04-10T21:34:01Z, "Name": "Golf", "Tel": "1150"},{"Code": "A004", "Type": "A", "Date": "2020-04-11T21:34:01Z, "Name": "Nop", "Tel": "1112"},{"Code": "B005", "Type": "B", "Date": "2020-04-12T21:34:05Z, "Name": "Steven", "Tel": "191"},]"}`
+		// data := fmt.Sprintf(`{"data":%v}`, expected)
+		queueService := service.NewQueueServiceMock()
+		queueService.On("GetQueuesType", types).Return(responseRepo, nil)
 
-// 		queueHandler := handler.NewQueueHandler(queueService)
+		queueHandler := handler.NewQueueHandler(queueService)
 
-// 		//Act
-// 		r := gin.Default()
-// 		r.GET("/:Type", queueHandler.GetQueuesType)
-// 		req, _ := http.NewRequest("GET", "/:Type", nil)
-// 		w := httptest.NewRecorder()
-// 		r.ServeHTTP(w, req)
+		//Act
 
-// 		// responseData, _ := ioutil.ReadAll(w.Body)
+		r := gin.Default()
+		r.GET("/:Type", queueHandler.GetQueuesType)
+		req, _ := http.NewRequest("GET", "/"+types, nil)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
 
-// 		var queues []model.QueueResponse
-// 		json.Unmarshal(w.Body.Bytes(), &queues)
+		// responseData, _ := ioutil.ReadAll(w.Body)
 
-// 		//Assert
-// 		assert.Equal(t, http.StatusOK, w.Code)
-// 		// assert.Equal(t, expected, queues)
+		//Assert
+		assert.Equal(t, http.StatusOK, w.Code)
+		// assert.Equal(t, expected, queues)
 
-// 	})
+	})
 
-// }
+	t.Run("Error Service", func(t *testing.T) {
+		//Arrange
+		types := "A"
+		responseRepo := []model.QueuesResponse{}
+		queueService := service.NewQueueServiceMock()
+		queueService.On("GetQueuesType", types).Return(responseRepo, errors.New("Error something"))
+		queueHandler := handler.NewQueueHandler(queueService)
+
+		//Act
+		r := gin.Default()
+		r.GET("/:Type", queueHandler.GetQueuesType)
+		req, _ := http.NewRequest("GET", "/"+types, nil)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+
+		//Assert
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	})
+
+	t.Run("Invalid type", func(t *testing.T) {
+		//Arrange
+		types := "F"
+		responseRepo := []model.QueuesResponse{}
+		queueService := service.NewQueueServiceMock()
+		queueService.On("GetQueuesType", types).Return(responseRepo, nil)
+		queueHandler := handler.NewQueueHandler(queueService)
+
+		//Act
+		r := gin.Default()
+		r.GET("/:Type", queueHandler.GetQueuesType)
+		req, _ := http.NewRequest("GET", "/"+types, nil)
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+
+		//Assert
+		assert.Equal(t, http.StatusNotAcceptable, w.Code)
+
+	})
+
+}
