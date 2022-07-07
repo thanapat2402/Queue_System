@@ -9,7 +9,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
 import { DetailModalComponent } from '../detail-modal/detail-modal.component';
-import { WebAdminComponent } from '../web-admin/web-admin.component';
 
 @Component({
   selector: 'app-add-modal',
@@ -59,7 +58,6 @@ export class AddModalComponent implements OnInit {
       .subscribe((result) => {
         console.log(result);
         if (result.message == 'Created') {
-          console.log('Hi');
           console.log(result.data.Code);
           alert(`${result.data.Code} has been created`);
         }

@@ -1,5 +1,4 @@
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
-import { MOCKUP } from 'src/app/data/mockData';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
 import { AddModalComponent } from '../add-modal/add-modal.component';
@@ -16,8 +15,8 @@ export class WebAdminComponent implements OnInit {
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
   detail: any;
-  @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
-  @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
+  // @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
+  // @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
   constructor(private service: MasterService) {
     this.getQueues();
     this.service.RefreshRequired.subscribe((result) => {
@@ -25,9 +24,9 @@ export class WebAdminComponent implements OnInit {
     });
   }
 
-  showData(code: string) {
-    this.viewDetail.getQueue(code);
-  }
+  // showData(code: string) {
+  //   this.viewDetail.getQueue(code);
+  // }
   //getQueues
   getQueues(code?: string) {
     console.log(code);
@@ -68,7 +67,7 @@ export class WebAdminComponent implements OnInit {
     }
   }
   open() {
-    this.addQueue.open();
+    // this.addQueue.open();
     this.clearList(this.dataList);
     this.getQueues();
   }
