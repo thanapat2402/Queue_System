@@ -36,7 +36,7 @@ func (r queueRepositoryDB) GetQueuesByType(types string) ([]model.QueueModel, er
 	return queues, nil
 }
 
-func (r queueRepositoryDB) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+func (r queueRepositoryDB) GetQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
 	err := r.db.Where("Name = ? AND Type = ?", name, types).First(&queue).Error
 	if err != nil {
@@ -62,7 +62,6 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
 	Type := strings.Trim(strcode, num)
-	// code, _ := strconv.Atoi(strings.TrimLeft(strcode, "ABCD"))
 	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
 	if err != nil {
 		return nil, err

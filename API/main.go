@@ -28,7 +28,6 @@ func main() {
 	queueRepo := repository.NewQueueRepositoryDB(db)
 
 	//Use Mock Data Repository to test
-	// queueRepo := repository.NewQueueRepositoryMock()
 	// queueRepo := repository.NewQueueRepositoryMock2()
 
 	queueService := service.NewQueueService(queueRepo)
@@ -71,6 +70,7 @@ func ConnectDatabase() (db *gorm.DB) {
 }
 
 func initConfig() {
+	//set Read form config.yaml
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
@@ -84,6 +84,7 @@ func initConfig() {
 }
 
 func initTimeZone() {
+	//set timezone thailand
 	ict, err := time.LoadLocation("Asia/Bangkok")
 	if err != nil {
 		panic(err)

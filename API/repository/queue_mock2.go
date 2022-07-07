@@ -44,7 +44,7 @@ func (r queueRepositoryMock2) GetQueuesByType(types string) ([]model.QueueModel,
 	return qOutput, nil
 }
 
-func (r queueRepositoryMock2) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+func (r queueRepositoryMock2) GetQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	for _, queues := range r.queues {
 		if queues.Name == name && queues.Type == types {
 			return &queues, nil

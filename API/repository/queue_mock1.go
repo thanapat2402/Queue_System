@@ -24,7 +24,7 @@ func (r *queueRepositoryMock) GetQueuesByType(types string) ([]model.QueueModel,
 	return args.Get(0).([]model.QueueModel), args.Error(1)
 }
 
-func (r *queueRepositoryMock) SearchQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
+func (r *queueRepositoryMock) GetQueuesByNameTypes(name string, types string) (*model.QueueModel, error) {
 	args := r.Called(name, types)
 	return args.Get(0).(*model.QueueModel), args.Error(1)
 }
