@@ -10,7 +10,6 @@ type QueueModel struct {
 	Date time.Time
 	Name string `gorm:"size:30"`
 	Tel  string `gorm:"size:16"`
-	// Status string `gorm:"size:20;default:Queue"`
 }
 
 type QueueInput struct {

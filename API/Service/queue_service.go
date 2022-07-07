@@ -1,6 +1,6 @@
 package service
 
-//Business logic
+//Business logic in here
 
 import (
 	"fmt"
@@ -62,7 +62,7 @@ func (s queueService) GetQueuesType(Type string) ([]model.QueuesResponse, error)
 }
 
 func (s queueService) SearchQueue(name string, types string) (*model.QueueResponse, error) {
-	queue, err := s.queueRepo.SearchQueuesByNameTypes(name, types)
+	queue, err := s.queueRepo.GetQueuesByNameTypes(name, types)
 	if err != nil {
 		log.Println(err)
 		return nil, ErrRepository

@@ -19,6 +19,7 @@ import (
 )
 
 func TestGetQueues(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("success", func(t *testing.T) {
 		//Arrange
 		responseService := []model.QueuesResponse{
@@ -70,6 +71,7 @@ func TestGetQueues(t *testing.T) {
 }
 
 func TestGetQueuesType(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("success", func(t *testing.T) {
 		//Arrange
 		types := "A"
@@ -137,6 +139,7 @@ func TestGetQueuesType(t *testing.T) {
 }
 
 func TestSearchQueue(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("success", func(t *testing.T) {
 		//Arrange
 		name := "Nop"
@@ -207,6 +210,7 @@ func TestSearchQueue(t *testing.T) {
 }
 
 func TestGetQueue(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("success", func(t *testing.T) {
 		//Arrange
 		code := "A004"
@@ -249,6 +253,7 @@ func TestGetQueue(t *testing.T) {
 }
 
 func TestAddQueue(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("Create", func(t *testing.T) {
 		//Arrange
 		data := model.QueueInput{Type: "A", Name: "Steven", Tel: "0856565565"}
@@ -315,6 +320,7 @@ func TestAddQueue(t *testing.T) {
 }
 
 func TestDeQueue(t *testing.T) {
+	gin.SetMode(gin.ReleaseMode)
 	t.Run("Delete", func(t *testing.T) {
 		//Arrange
 		code := "A004"

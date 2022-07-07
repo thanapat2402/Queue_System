@@ -129,7 +129,7 @@ func TestSearchQueue(t *testing.T) {
 		queueRepo := repository.NewQueueRepositoryMock()
 		types := "A"
 		name := "Nop"
-		queueRepo.On("SearchQueuesByNameTypes", name, types).Return(&model.QueueModel{
+		queueRepo.On("GetQueuesByNameTypes", name, types).Return(&model.QueueModel{
 			Code: 4,
 			Type: "A",
 			Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
@@ -154,7 +154,7 @@ func TestSearchQueue(t *testing.T) {
 		name := "Nop"
 		//Arrage
 		queueRepo := repository.NewQueueRepositoryMock()
-		queueRepo.On("SearchQueuesByNameTypes", name, types).Return(&model.QueueModel{}, errors.New("Error Something"))
+		queueRepo.On("GetQueuesByNameTypes", name, types).Return(&model.QueueModel{}, errors.New("Error Something"))
 		queueService := service.NewQueueService(queueRepo)
 
 		//Act
