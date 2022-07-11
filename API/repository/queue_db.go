@@ -10,14 +10,17 @@ import (
 	"gorm.io/gorm"
 )
 
+//Adapter private
 type queueRepositoryDB struct {
 	db *gorm.DB
 }
 
+//Constructor Public เพื่อ new instance
 func NewQueueRepositoryDB(db *gorm.DB) QueueRepository {
 	return queueRepositoryDB{db: db}
 }
 
+//buld all receiver function for interface
 func (r queueRepositoryDB) GetAllQueues() ([]model.QueueModel, error) {
 	queues := []model.QueueModel{}
 	err := r.db.Order("Date").Find(&queues).Error
