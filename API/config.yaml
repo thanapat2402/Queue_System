@@ -3,7 +3,6 @@ app:
 
 db:
   server: localhost
-<<<<<<< Updated upstream
   driver: SQLEXPRESS
   database: QueueSystem
 
@@ -13,7 +12,3 @@ db2:
   host: lcpbq9az4jklobvq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
   port: 3306
   database: rmick5ocdyv7zlu4
-=======
-  driver: MSSQLSERVER
-  database: QueueSystem
->>>>>>> Stashed changes

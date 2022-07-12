@@ -64,12 +64,12 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 	var queue model.QueueModel
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
-	Type := strings.Trim(strcode, num)
-	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
+	types := strings.Trim(strcode, num)
+	err := r.db.Where("Code = ? AND Type = ?", code, types).First(&queue).Error
 	if err != nil {
 		return nil, err
 	}
-	r.db.Where("Code = ? AND Type = ?", code).Delete(&queue)
+	r.db.Where("Code = ? AND Type = ?", code, types).Delete(&queue)
 	return &queue, nil
 }
 
