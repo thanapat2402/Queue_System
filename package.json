@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "api": "cd API && go run main.go",
+    "api": "cd API && go run .",
     "app": "cd Front-end && ng s -o "
   }
 }

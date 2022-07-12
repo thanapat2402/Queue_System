@@ -31,9 +31,15 @@ export class AddModalComponent implements OnInit {
   };
   ngOnInit(): void {}
   queueForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    tel: new FormControl('', Validators.required),
-    type: new FormControl('', Validators.required),
+    name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    tel: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[0-9]*'),
+    ]),
+    type: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[A-D]*'),
+    ]),
   });
   open() {
     this.modalService
