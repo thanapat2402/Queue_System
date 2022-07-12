@@ -1,13 +1,4 @@
 
 API/__debug_bin.exe
-API/model/setup.go
-API/model/setup.go
-API/handler/db.go
-API/model/setup.go
-API/repository/queue_db.go
 API/config.yaml
-<<<<<<< HEAD
-API/config.yaml
-=======
 
->>>>>>> Unit_Test
