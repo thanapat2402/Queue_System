@@ -69,7 +69,7 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 	if err != nil {
 		return nil, err
 	}
-	r.db.Where("Code = ?", code).Delete(&queue)
+	r.db.Where("Code = ? AND Type = ?", code).Delete(&queue)
 	return &queue, nil
 }
 
