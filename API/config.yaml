@@ -5,3 +5,10 @@ db:
   server: localhost
   driver: SQLEXPRESS
   database: QueueSystem
+
+db2:
+  user: qhumpwtae4b9afg9
+  pass: weejs0vw7tu387m1
+  host: lcpbq9az4jklobvq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+  port: 3306
+  database: rmick5ocdyv7zlu4

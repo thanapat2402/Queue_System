@@ -4,7 +4,7 @@ import (
 	"q/model"
 )
 
-//Port -Interface
+//Port
 type QueueRepository interface {
 	GetAllQueues() ([]model.QueueModel, error)
 	GetQueuesByType(Type string) ([]model.QueueModel, error)
