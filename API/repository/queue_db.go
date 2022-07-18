@@ -77,11 +77,12 @@ func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel
 	newCode := r.generateCode(data.Type)
 	date := time.Now()
 	Queue := model.QueueModel{
-		Code: newCode,
-		Type: data.Type,
-		Date: date,
-		Name: data.Name,
-		Tel:  data.Tel}
+		Code:   newCode,
+		Type:   data.Type,
+		Date:   date,
+		Name:   data.Name,
+		Tel:    data.Tel,
+		UserID: data.UserID}
 	r.db.Create(&Queue)
 	return &Queue, nil
 }
