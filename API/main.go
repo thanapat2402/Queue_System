@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"q/handler"
 	"q/repository"
 	"q/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -38,5 +36,6 @@ func main() {
 	}
 
 	//Run Server
-	route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
+	// route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
+	route.Run()
 }
