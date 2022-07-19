@@ -3,6 +3,22 @@
   color: white;
 }
 .logo {
-  height: 2.5em;
+  height: 4em;
   margin: auto;
+}
+
+.bg-A {
+  background: #f5efd5;
+}
+
+.bg-B {
+  background: #dfe9f5;
+}
+
+.bg-C {
+  background: #f6e6de;
+}
+
+.bg-D {
+  background: #d9f0e7;
 }

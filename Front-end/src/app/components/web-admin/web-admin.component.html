@@ -2,34 +2,43 @@
   <app-detail-modal></app-detail-modal>
   <app-add-modal></app-add-modal>
 
-  <div class="nav navbar navbar-light justify-content-between">
+  <div class="nav navbar navbar-light justify-content-between d-flex">
     <a href="/">
       <img
         class="logo navbar-brand"
         src="https://upload.wikimedia.org/wikipedia/en/thumb/5/59/ThaiBevLogo.svg/1200px-ThaiBevLogo.svg.png"
       />
     </a>
-    <div ngbDropdown class="d-inline-block">
-      <button
-        type="button"
+
+    <div class="me-3">
+      <!-- <button
         class="btn btn-outline-success"
-        id="dropdown1"
-        ngbDropdownToggle
+        #popupbtn
+        id="popupbtn"
+        (click)="open()"
       >
-        Select Type
-      </button>
-      <div ngbDropdownMenu aria-labelledby="dropdown1">
-        <!-- items as buttons -->
-        <button ngbDropdownItem (click)="getQueues()">All</button>
-        <button ngbDropdownItem (click)="getQueues('A')">A</button>
-        <button ngbDropdownItem (click)="getQueues('B')">B</button>
-        <button ngbDropdownItem (click)="getQueues('C')">C</button>
-        <button ngbDropdownItem (click)="getQueues('D')">D</button>
+        Add Queue
+      </button> -->
+      <div ngbDropdown class="d-inline mt-3">
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          id="dropdown1"
+          ngbDropdownToggle
+        >
+          Select Type
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdown1">
+          <!-- items as buttons -->
+          <button ngbDropdownItem (click)="getQueues()">All</button>
+          <button ngbDropdownItem (click)="getQueues('A')">A</button>
+          <button ngbDropdownItem (click)="getQueues('B')">B</button>
+          <button ngbDropdownItem (click)="getQueues('C')">C</button>
+          <button ngbDropdownItem (click)="getQueues('D')">D</button>
+        </div>
       </div>
-    </div>
-    <div class="btn-group me-3">
       <button
-        class="btn btn-outline-success"
+        class="btn btn-outline-success ms-3"
         #popupbtn
         id="popupbtn"
         (click)="open()"
@@ -44,7 +53,7 @@
 
   <hr />
 
-  <table class="table table-responsive table-strip text-center">
+  <table class="table table-responsive table-strip text-center fw-bold">
     <thead>
       <tr>
         <th>Type</th>
@@ -54,8 +63,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of dataList">
-        <td>{{ item.Type }}</td>
+      <tr
+        *ngFor="let item of dataList"
+        [ngClass]="{
+          'bg-A': item.Type === 'A',
+          'bg-B': item.Type === 'B',
+          'bg-C': item.Type === 'C',
+          'bg-D': item.Type === 'D'
+        }"
+      >
+        <td>
+          <img [src]="getTypeIcon(item.Type)" width="30rem" />
+        </td>
         <td>{{ item.Code }}</td>
         <td>{{ getTimeString(item.Date) }}</td>
         <td>
