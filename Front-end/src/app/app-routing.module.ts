@@ -4,7 +4,7 @@ import { WebAdminComponent } from './components/web-admin/web-admin.component';
 import { WebCustomerComponent } from './components/web-customer/web-customer.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'customer', pathMatch: 'full' },
+  { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { path: 'admin', component: WebAdminComponent },
   { path: 'customer', component: WebCustomerComponent },
 ];
