@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"q/handler"
 	"q/repository"
 	"q/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -26,17 +24,22 @@ func main() {
 	route := gin.Default()
 	route.Use(cors.Default())
 	//Routes
-	q := route.Group("/api/v1/queue")
+	web := route.Group("/api/v1/web")
 
 	{
-		q.GET("/", queueHandler.GetQueues)
-		q.GET("/:Type", queueHandler.GetQueuesType)
-		q.GET("/code/:Code", queueHandler.GetQueue)
-		q.GET("/search", queueHandler.SearchQueue)
-		q.POST("/", queueHandler.AddQueue)
-		q.DELETE("/:Code", queueHandler.DeQueue)
+		web.GET("/", queueHandler.GetQueues)
+		web.GET("/:Type", queueHandler.GetQueuesType)
+		web.GET("/code/:Code", queueHandler.GetQueue)
+		web.GET("/search", queueHandler.SearchQueue)
+		web.POST("/", queueHandler.AddQueue)
+		web.DELETE("/:Code", queueHandler.DeQueue)
 	}
 
+	line := route.Group("/api/v1/line")
+	{
+		line.GET("/", queueHandler.Hello)
+		line.POST("/callback", queueHandler.Callback)
+	}
 	//Run Server
-	route.Run(fmt.Sprintf(":%v", viper.GetInt("app.port")))
+	route.Run()
 }

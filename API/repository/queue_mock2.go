@@ -12,7 +12,7 @@ type queueRepositoryMock2 struct {
 	queues []model.QueueModel
 }
 
-func NewQueueRepositoryMock2() QueueRepository {
+func NewQueueRepositoryMock2() queueRepositoryMock2 {
 	queues := []model.QueueModel{
 		{
 			Code: 4,

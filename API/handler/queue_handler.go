@@ -6,6 +6,7 @@ import (
 	"q/service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 type queueHandler struct {
@@ -75,6 +76,13 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Created"})
+	if input.UserID != "" {
+		bot := GetBot()
+		
+		if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("มีคนอยากเซ็ทหย่อสูดต่อซูดผ่อซีหม่อสองห่อใส่ไข่กับคุณ")).Do(); err != nil {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		}
+	}
 }
 
 func (h queueHandler) DeQueue(c *gin.Context) {

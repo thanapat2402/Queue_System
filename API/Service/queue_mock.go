@@ -43,3 +43,28 @@ func (r *queueServiceMock) DeQueue(strcode string) (*model.QueueResponse, error)
 	args := r.Called(strcode)
 	return args.Get(0).(*model.QueueResponse), args.Error(1)
 }
+
+func (r *queueServiceMock) GetQueueLine(code string) (*model.QueueResponseLine, error) {
+	args := r.Called(code)
+	return args.Get(0).(*model.QueueResponseLine), args.Error(1)
+}
+
+func (r *queueServiceMock) DeleteQueuebyUID(UserID string) error {
+	args := r.Called(UserID)
+	return args.Error(0)
+}
+
+func (r *queueServiceMock) FlexQueue(UserID string) (string, error) {
+	args := r.Called(UserID)
+	return args.Get(0).(string), args.Error(1)
+}
+
+func (r *queueServiceMock) CheckQueue(UserID string) (string, error) {
+	args := r.Called(UserID)
+	return args.Get(0).(string), args.Error(1)
+}
+
+func (r *queueServiceMock) AmountQueue(UserID string) (int, error) {
+	args := r.Called(UserID)
+	return args.Get(0).(int), args.Error(1)
+}

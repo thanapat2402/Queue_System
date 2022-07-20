@@ -11,37 +11,37 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetQueues(t *testing.T) {
-	t.Run("Response", func(t *testing.T) {
-		//Arrage
-		queueRepoMock := repository.NewQueueRepositoryMock2()
-		queueService := service.NewQueueService(queueRepoMock)
+// func TestGetQueues(t *testing.T) {
+// 	t.Run("Response", func(t *testing.T) {
+// 		//Arrage
+// 		queueRepoMock := repository.NewQueueRepositoryMock2()
+// 		queueService := service.NewQueueService(queueRepoMock)
 
-		//Act
-		queues, err := queueService.GetQueues()
-		if err != nil {
-			println(err)
-		}
-		expected := []model.QueuesResponse{
-			{
-				Code: "A004",
-				Type: "A",
-				Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
-				Name: "Nop",
-				Tel:  "1112"},
-			{
-				Code: "B005",
-				Type: "B",
-				Date: time.Date(2022, time.July, 12, 21, 34, 05, 0, time.UTC),
-				Name: "Steven",
-				Tel:  "191"},
-		}
+// 		//Act
+// 		queues, err := queueService.GetQueues()
+// 		if err != nil {
+// 			println(err)
+// 		}
+// 		expected := []model.QueuesResponse{
+// 			{
+// 				Code: "A004",
+// 				Type: "A",
+// 				Date: time.Date(2020, time.April, 11, 21, 34, 01, 0, time.UTC),
+// 				Name: "Nop",
+// 				Tel:  "1112"},
+// 			{
+// 				Code: "B005",
+// 				Type: "B",
+// 				Date: time.Date(2022, time.July, 12, 21, 34, 05, 0, time.UTC),
+// 				Name: "Steven",
+// 				Tel:  "191"},
+// 		}
 
-		//Assert
-		assert.Equal(t, expected, queues)
-	})
+// 		//Assert
+// 		assert.Equal(t, expected, queues)
+// 	})
 
-}
+// }
 
 func TestGetAllQueues(t *testing.T) {
 	t.Run("Response", func(t *testing.T) {
