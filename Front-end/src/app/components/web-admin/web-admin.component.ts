@@ -1,4 +1,5 @@
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 import { MOCKUP } from 'src/app/data/mockData';
 import { PostQueue } from 'src/app/models/queue';
 import { MasterService } from 'src/app/service/master.service';
@@ -12,6 +13,7 @@ import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 })
 export class WebAdminComponent implements OnInit {
   //dataList = MOCKUP;
+  private updateSubscription!: Subscription;
   dataList: any = [];
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
@@ -61,11 +63,17 @@ export class WebAdminComponent implements OnInit {
     list = [];
   }
   clearQueue() {
-    if (confirm('Are you sure to clear all queues?')) {
-      this.dataList.forEach((item: any) => {
-        this.deQueue(item.Code);
+    console.log(this.dataList);
+    this.dataList.forEach((item: any) => {
+      console.log(item.Code);
+      this.service.deleteQueue(item.Code).subscribe((result) => {
+        console.log(result);
       });
-    }
+    });
+    this.getQueues();
+    // this.dataList.forEach((item: any) => {
+    //   this.deQueue(item.Code)
+    // };
   }
   open() {
     this.addQueue.open();
@@ -75,7 +83,20 @@ export class WebAdminComponent implements OnInit {
   getTimeString(date: string) {
     return new Date(date).toLocaleTimeString('th');
   }
+  getTypeIcon(type: string) {
+    if (type === 'A')
+      return 'https://cdn-icons-png.flaticon.com/512/32/32438.png';
+    else if (type === 'B')
+      return 'https://cdn-icons-png.flaticon.com/512/32/32384.png';
+    else if (type === 'C')
+      return 'https://cdn-icons-png.flaticon.com/512/33/33308.png';
+    else if (type === 'D')
+      return 'https://cdn-icons-png.flaticon.com/512/32/32441.png';
+    else return '/';
+  }
+
   ngOnInit(): void {
-    this.getQueues();
+    this.updateSubscription = interval(1000).subscribe((val) => this.getQueues);
+    // this.getQueues();
   }
 }

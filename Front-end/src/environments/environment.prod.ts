@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  baseApi: 'https://queue-system-admin.herokuapp.com/api/v1/queue/',
 };

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApi: 'http://localhost:8086/api/v1/queue/',
+  baseApi: 'https://queue-system-admin.herokuapp.com/api/v1/queue/',
 };
 
 /*
