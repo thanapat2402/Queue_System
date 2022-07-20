@@ -43,3 +43,18 @@ func (r *queueRepositoryMock) CreateQueue(data model.QueueInput) (*model.QueueMo
 	args := r.Called(data)
 	return args.Get(0).(*model.QueueModel), args.Error(1)
 }
+
+func (r *queueRepositoryMock) GetCurrentQueue(types string) (*model.QueueModel, error) {
+	args := r.Called(types)
+	return args.Get(0).(*model.QueueModel), args.Error(1)
+}
+
+func (r *queueRepositoryMock) DeleteQueuebyUID(UserID string) (*model.QueueModel, error) {
+	args := r.Called(UserID)
+	return args.Get(0).(*model.QueueModel), args.Error(1)
+}
+
+func (r *queueRepositoryMock) GetQueueByUserID(UserID string) (*model.QueueModel, error) {
+	args := r.Called(UserID)
+	return args.Get(0).(*model.QueueModel), args.Error(1)
+}

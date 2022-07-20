@@ -7,8 +7,12 @@ db:
   database: QueueSystem
 
 db2:
-  user: qhumpwtae4b9afg9
-  pass: weejs0vw7tu387m1
+  user: bxhm360m0tucv71t
+  pass: zzgcydujz7s2qqqx
   host: lcpbq9az4jklobvq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
   port: 3306
-  database: rmick5ocdyv7zlu4
+  database: re6rqro966y9u4cq
+
+line:
+  CHANNEL_SECRET: 51de3773036ea50afdba0836f6454018
+  CHANNEL_TOKEN: 8AgOT7UHy3ypdFinyOdtM5/fR1rv85e+LRrKf0fsauW+SN6m5YmJ2tL5l9HEPAyrHStpGd7S2zoYYA16EdOm2n/rgf0HPYqz8R0xxSwIWqQkRbrq7buWdlalJLxzxlQQmiXABHjQYMm+tl0jJypb1AdB04t89/1O/w1cDnyilFU=

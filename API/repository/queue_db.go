@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"q/model"
 	"strconv"
@@ -53,9 +54,12 @@ func (r queueRepositoryDB) GetQueuesByCode(strcode string) (*model.QueueModel, e
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
 	Type := strings.Trim(strcode, num)
-	err := r.db.Where("Code = ? AND Type = ?", code, Type).First(&queue).Error
-	if err != nil {
-		return nil, err
+	result := r.db.Where("Code = ? AND Type = ?", code, Type).Find(&queue)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New("user Code not found")
 	}
 	return &queue, nil
 }

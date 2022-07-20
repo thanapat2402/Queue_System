@@ -2,11 +2,15 @@ package handler
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"q/model"
 	"strings"
 	"time"
 
+	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/spf13/viper"
+
 	// "gorm.io/driver/sqlserver"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -37,12 +41,22 @@ func ConnectDatabase() (db *gorm.DB) {
 
 	//Set Data source name
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?&parseTime=True&loc=Local",
-		viper.GetString("db2.user"),
-		viper.GetString("db2.pass"),
-		viper.GetString("db2.host"),
-		viper.GetString("db2.port"),
-		viper.GetString("db2.database"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASS"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_DATABASE"),
 	)
+	if os.Getenv("DB_DATABASE") == "" {
+		dsn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?&parseTime=True&loc=Local",
+			viper.GetString("db2.user"),
+			viper.GetString("db2.pass"),
+			viper.GetString("db2.host"),
+			viper.GetString("db2.port"),
+			viper.GetString("db2.database"),
+		)
+	}
+
 	dial := mysql.Open(dsn)
 
 	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
@@ -53,6 +67,26 @@ func ConnectDatabase() (db *gorm.DB) {
 	//auto migration
 	database.AutoMigrate(&model.QueueModel{})
 	return database
+}
+
+func GetBot() (bot *linebot.Client) {
+	if os.Getenv("CHANNEL_SECRET") == "" {
+		secret := viper.GetString("line.CHANNEL_SECRET")
+		token := viper.GetString("line.CHANNEL_TOKEN")
+		bot, err := linebot.New(secret, token)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return bot
+	} else {
+		secret := os.Getenv("CHANNEL_SECRET")
+		token := os.Getenv("CHANNEL_TOKEN")
+		bot, err := linebot.New(secret, token)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return bot
+	}
 }
 
 func initConfig() {
