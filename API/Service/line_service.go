@@ -61,8 +61,8 @@ func (s queueService) AmountQueue(UserID string) (int, error) {
 	return wait, nil
 }
 
-func (s queueService) FlexQueue(UserID string) (string, error) {
-	queue, err := s.GetQueueLine(UserID)
+func (s queueService) FlexQueue(UserCode string) (string, error) {
+	queue, err := s.GetQueueLine(UserCode)
 	if err != nil {
 		return "", err
 	}
@@ -216,6 +216,7 @@ func (s queueService) FlexQueue(UserID string) (string, error) {
 		  ]
 		}
 	  }`, queue.UserCode, queue.Name, queue.Date.Format("Monday 2, 15:04:05"), wait, queue.UserCode)
+	
 	return flex, nil
 }
 

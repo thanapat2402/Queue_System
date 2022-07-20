@@ -83,7 +83,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 					log.Println(err)
 				}
 				// New Flex Message
-				flexMessage := linebot.NewFlexMessage("message.Text", flexContainer)
+				flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
 				// Reply Message
 				_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
 				if err != nil {

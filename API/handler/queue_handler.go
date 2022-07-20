@@ -75,14 +75,27 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Created"})
 	if input.UserID != "" {
 		bot := GetBot()
-		
-		if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("มีคนอยากเซ็ทหย่อสูดต่อซูดผ่อซีหม่อสองห่อใส่ไข่กับคุณ")).Do(); err != nil {
+		flex, err := h.qService.FlexQueue(queue.Code)
+		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+		// Unmarshal JSON
+		flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(flex))
+		if err != nil {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+		// New Flex Message
+		flexMessage := linebot.NewFlexMessage("Your Queue", flexContainer)
+		if _, err := bot.PushMessage(input.UserID, flexMessage).Do(); err != nil {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
 		}
 	}
+	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Created"})
 }
 
 func (h queueHandler) DeQueue(c *gin.Context) {
