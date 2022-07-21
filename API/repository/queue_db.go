@@ -80,17 +80,25 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 }
 
 func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
-	newCode := r.generateCode(data.Type)
-	date := time.Now()
-	Queue := model.QueueModel{
-		Code:   newCode,
-		Type:   data.Type,
-		Date:   date,
-		Name:   data.Name,
-		Tel:    data.Tel,
-		UserID: data.UserID}
-	r.db.Create(&Queue)
-	return &Queue, nil
+	queue := model.QueueModel{}
+	result := r.db.Where("user_id = ?", queue.UserID).Find(&queue)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		newCode := r.generateCode(data.Type)
+		date := time.Now()
+		Queue := model.QueueModel{
+			Code:   newCode,
+			Type:   data.Type,
+			Date:   date,
+			Name:   data.Name,
+			Tel:    data.Tel,
+			UserID: data.UserID}
+		r.db.Create(&Queue)
+		return &Queue, nil
+	}
+	return nil, errors.New("queue already exists")
 }
 
 func (r queueRepositoryDB) generateCode(genre string) (NewCode int) {

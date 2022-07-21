@@ -94,7 +94,9 @@ func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 
 func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.CreateQueue(data)
-	if err != nil {
+	if err.Error() == "queue already exists"{
+		return nil,err
+	}else if err != nil {
 		log.Println(err)
 		return nil, ErrRepository
 	}
