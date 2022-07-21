@@ -46,7 +46,14 @@ func (h queueHandler) Callback(c *gin.Context) {
 							log.Print(err)
 						}
 					}
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("กรุณารออีก %v คิว", wait))).Do(); err != nil {
+					var messagequeue string
+					if wait == 0 {
+						messagequeue = "ถึงคิวของคุณแล้ว"
+					} else {
+						messagequeue = fmt.Sprintf("กรุณารออีก %v คิว", wait)
+					}
+
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(messagequeue)).Do(); err != nil {
 						log.Print(err)
 					}
 					return

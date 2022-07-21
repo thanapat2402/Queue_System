@@ -22,6 +22,7 @@ func (s queueService) GetQueues() ([]model.QueuesResponse, error) {
 	queues, err := s.queueRepo.GetAllQueues()
 	if err != nil {
 		log.Panic(ErrRepository)
+		log.Println(err)
 		return nil, err
 	}
 	qReponses := []model.QueuesResponse{}
@@ -120,4 +121,62 @@ func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {
 		Tel:  queue.Tel,
 	}
 	return &qReponse, nil
+}
+
+func (s queueService) ReportQueue() (*model.ReportQueue, error) {
+	queues, err := s.GetQueues()
+	println(err)
+	if err != nil {
+		log.Panic(ErrRepository)
+		return nil, err
+	}
+	var a, b, c, d []model.QueuesResponse
+	for _, queue := range queues {
+		switch queue.Type {
+		case "A":
+			a = append(a, queue)
+		case "B":
+			b = append(b, queue)
+		case "C":
+			c = append(c, queue)
+		case "D":
+			d = append(d, queue)
+		default:
+			log.Println("This Type not in Conditions")
+		}
+	}
+
+	var currentA, currentB, currentC, currentD string
+	if a == nil {
+		currentA = "no queue type A"
+	} else {
+		currentA = a[0].Code
+	}
+	if b == nil {
+		currentB = "no queue type B"
+	} else {
+		currentB = b[0].Code
+	}
+	if c == nil {
+		currentC = "no queue type C"
+	} else {
+		currentC = c[0].Code
+	}
+	if d == nil {
+		currentD = "no queue type D"
+	} else {
+		currentD = d[0].Code
+	}
+	qReport := model.ReportQueue{
+		AmountQueueA:  len(a),
+		AmountQueueB:  len(b),
+		AmountQueueC:  len(c),
+		AmountQueueD:  len(d),
+		CurrentqueueA: currentA,
+		CurrentqueueB: currentB,
+		CurrentqueueC: currentC,
+		CurrentqueueD: currentD,
+	}
+
+	return &qReport, nil
 }

@@ -13,6 +13,7 @@ type QueueService interface {
 	GetQueue(Code string) (*model.QueueResponse, error)
 	AddQueue(data model.QueueInput) (*model.QueueResponse, error)
 	DeQueue(Code string) (*model.QueueResponse, error)
+	ReportQueue() (*model.ReportQueue, error)
 	//line
 	GetQueueLine(Code string) (*model.QueueResponseLine, error)
 	DeleteQueuebyUID(UserID string) error

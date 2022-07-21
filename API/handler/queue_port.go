@@ -10,6 +10,7 @@ type QueueHandler interface {
 	GetQueue(c *gin.Context)
 	AddQueue(c *gin.Context)
 	DeQueue(c *gin.Context)
+	ReportQueue(c *gin.Context)
 	//line
 	Callback(c *gin.Context)
 	Hello(c *gin.Context)

@@ -61,6 +61,7 @@ func (s queueService) AmountQueue(UserID string) (int, error) {
 	return wait, nil
 }
 
+
 func (s queueService) FlexQueue(UserCode string) (string, error) {
 	queue, err := s.GetQueueLine(UserCode)
 	if err != nil {
@@ -219,6 +220,7 @@ func (s queueService) FlexQueue(UserCode string) (string, error) {
 	
 	return flex, nil
 }
+
 
 // func pushmessage (userID string,message string){
 // 	bot, err := linebot.New(<channel secret>, <channel token>)

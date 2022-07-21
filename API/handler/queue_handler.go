@@ -106,3 +106,12 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted"})
 }
+
+func (h queueHandler) ReportQueue(c *gin.Context) {
+	report, err := h.qService.ReportQueue()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": report, "message": "Report"})
+}

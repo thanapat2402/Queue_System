@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"log"
 	"q/model"
 	"strconv"
 	"strings"
@@ -26,6 +27,7 @@ func (r queueRepositoryDB) GetAllQueues() ([]model.QueueModel, error) {
 	queues := []model.QueueModel{}
 	err := r.db.Order("Date").Find(&queues).Error
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return queues, nil

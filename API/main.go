@@ -28,6 +28,7 @@ func main() {
 
 	{
 		web.GET("/", queueHandler.GetQueues)
+		web.GET("/report", queueHandler.ReportQueue)
 		web.GET("/:Type", queueHandler.GetQueuesType)
 		web.GET("/code/:Code", queueHandler.GetQueue)
 		web.GET("/search", queueHandler.SearchQueue)

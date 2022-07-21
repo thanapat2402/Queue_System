@@ -42,3 +42,14 @@ type QueueResponseLine struct {
 	Date        time.Time
 	Name        string `gorm:"size:30"`
 }
+
+type ReportQueue struct {
+	AmountQueueA  int    `gorm:"size:5"`
+	AmountQueueB  int    `gorm:"size:5"`
+	AmountQueueC  int    `gorm:"size:5"`
+	AmountQueueD  int    `gorm:"size:5"`
+	CurrentqueueA string `gorm:"size:2"`
+	CurrentqueueB string `gorm:"size:2"`
+	CurrentqueueC string `gorm:"size:2"`
+	CurrentqueueD string `gorm:"size:2"`
+}
