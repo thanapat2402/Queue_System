@@ -94,20 +94,23 @@ func (s queueService) GetQueue(code string) (*model.QueueResponse, error) {
 
 func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.CreateQueue(data)
-	if err.Error() == "queue already exists"{
-		return nil,err
-	}else if err != nil {
+	if err != nil {
+		if err.Error() == "queue already exists" {
+			log.Println(err)
+			return nil, err
+		}
 		log.Println(err)
 		return nil, ErrRepository
+	} else {
+		code := fmt.Sprintf("%v%03d", queue.Type, queue.Code)
+		qReponse := model.QueueResponse{
+			Code: code,
+			Date: queue.Date,
+			Name: queue.Name,
+			Tel:  queue.Tel,
+		}
+		return &qReponse, nil
 	}
-	code := fmt.Sprintf("%v%03d", queue.Type, queue.Code)
-	qReponse := model.QueueResponse{
-		Code: code,
-		Date: queue.Date,
-		Name: queue.Name,
-		Tel:  queue.Tel,
-	}
-	return &qReponse, nil
 }
 
 func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {

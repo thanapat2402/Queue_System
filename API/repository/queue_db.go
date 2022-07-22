@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"q/model"
 	"strconv"
@@ -81,8 +80,9 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 
 func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
-	result := r.db.Where("user_id = ?", queue.UserID).Find(&queue)
+	result := r.db.Where("user_id = ?", data.UserID).Find(&queue)
 	if result.Error != nil {
+		log.Println(result.Error)
 		return nil, result.Error
 	}
 	if result.RowsAffected == 0 {
@@ -108,10 +108,8 @@ func (r queueRepositoryDB) generateCode(genre string) (NewCode int) {
 	now := time.Now().Format("2006-02-01")
 	if last == now {
 		NewCode := queue.Code + 1
-		fmt.Println(NewCode)
 		return NewCode
 	}
 	NewCode = 1
-	fmt.Println(NewCode)
 	return NewCode
 }
