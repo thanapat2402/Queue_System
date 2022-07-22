@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"q/model"
@@ -75,20 +76,20 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 	queue, err := h.qService.AddQueue(input)
 	if err != nil {
 		if err.Error() == "queue already exists" {
-			if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("ท่านจองคิวไปแล้วกรุณายกเลิกคิวก่อนหน้า")).Do(); err != nil {
+			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านจองคิวไปแล้วกรุณายกเลิกคิวก่อนหน้า")).Do(); err != nil {
 				log.Print(err)
 			}
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		} else {
-			if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถบันทึกคิวได้")).Do(); err != nil {
+			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถบันทึกคิวได้")).Do(); err != nil {
 				log.Print(err)
 			}
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 			return
 		}
 	}
-	if input.UserID != "" {
+	if queue.UserID != "" {
 		flex, err := h.qService.FlexQueue(queue.Code)
 		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
@@ -110,13 +111,37 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Created"})
 }
 
-func (h queueHandler) DeQueue(c *gin.Context) {
+func (h queueHandler) DeQueueOld(c *gin.Context) {
 	queue, err := h.qService.DeQueue(c.Param("Code"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted"})
+}
+
+func (h queueHandler) DeQueue(c *gin.Context) {
+	bot := GetBot()
+	queue, err := h.qService.DeQueue(c.Param("Code"))
+	if err != nil {
+		if err.Error() == "user Code not found" {
+			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
+				log.Print(err)
+			}
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		} else {
+			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
+				log.Print(err)
+			}
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+	}
+	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("คิว %v ของท่านถูกยกเลิกแล้วครับ", queue.Code))).Do(); err != nil {
+		log.Print(err)
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted"})
 }
 
 func (h queueHandler) ReportQueue(c *gin.Context) {

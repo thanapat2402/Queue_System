@@ -70,9 +70,12 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 	num := strings.TrimLeft(strcode, "ABCD")
 	code, _ := strconv.Atoi(num)
 	types := strings.Trim(strcode, num)
-	err := r.db.Where("Code = ? AND Type = ?", code, types).First(&queue).Error
-	if err != nil {
-		return nil, err
+	result := r.db.Where("Code = ? AND Type = ?", code, types).Find(&queue)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New("user Code not found")
 	}
 	r.db.Where("Code = ? AND Type = ?", code, types).Delete(&queue)
 	return &queue, nil

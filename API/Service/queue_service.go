@@ -116,16 +116,22 @@ func (s queueService) AddQueue(data model.QueueInput) (*model.QueueResponse, err
 func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.DeleteQueue(code)
 	if err != nil {
+		if err.Error() == "user Code not found" {
+			log.Println(err)
+			return nil, err
+		}
 		log.Println(err)
 		return nil, ErrRepository
+	} else {
+		qReponse := model.QueueResponse{
+			Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
+			Date: queue.Date,
+			Name: queue.Name,
+			Tel:  queue.Tel,
+			UserID: queue.UserID,
+		}
+		return &qReponse, nil
 	}
-	qReponse := model.QueueResponse{
-		Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
-		Date: queue.Date,
-		Name: queue.Name,
-		Tel:  queue.Tel,
-	}
-	return &qReponse, nil
 }
 
 func (s queueService) ReportQueue() (*model.ReportQueue, error) {

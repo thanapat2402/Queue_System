@@ -21,10 +21,11 @@ type QueueInput struct {
 }
 
 type QueueResponse struct {
-	Code string `gorm:"size:5"`
-	Date time.Time
-	Name string `gorm:"size:30"`
-	Tel  string `gorm:"size:16"`
+	Code   string `gorm:"size:5"`
+	Date   time.Time
+	Name   string `gorm:"size:30"`
+	Tel    string `gorm:"size:16"`
+	UserID string `gorm:"size:50"`
 }
 
 type QueuesResponse struct {

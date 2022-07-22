@@ -319,7 +319,7 @@ func TestAddQueue(t *testing.T) {
 
 }
 
-func TestDeQueue(t *testing.T) {
+func TestDeQueueOld(t *testing.T) {
 	gin.SetMode(gin.ReleaseMode)
 	t.Run("Delete", func(t *testing.T) {
 		//Arrange
@@ -346,7 +346,7 @@ func TestDeQueue(t *testing.T) {
 		code := "A004"
 		responseService := model.QueueResponse{}
 		queueService := service.NewQueueServiceMock()
-		queueService.On("DeQueue", code).Return(&responseService, errors.New("Error something"))
+		queueService.On("DeQueueOld", code).Return(&responseService, errors.New("Error something"))
 		queueHandler := handler.NewQueueHandler(queueService)
 
 		//Act

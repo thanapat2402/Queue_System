@@ -49,9 +49,9 @@ func (r *queueServiceMock) GetQueueLine(code string) (*model.QueueResponseLine, 
 	return args.Get(0).(*model.QueueResponseLine), args.Error(1)
 }
 
-func (r *queueServiceMock) DeleteQueuebyUID(UserID string) error {
+func (r *queueServiceMock) DeleteQueuebyUID(UserID string) (*model.QueueResponse, error) {
 	args := r.Called(UserID)
-	return args.Error(0)
+	return args.Get(0).(*model.QueueResponse), args.Error(1)
 }
 
 func (r *queueServiceMock) FlexQueue(UserID string) (string, error) {
