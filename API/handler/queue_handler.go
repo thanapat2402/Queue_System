@@ -125,23 +125,17 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 	queue, err := h.qService.DeQueue(c.Param("Code"))
 	if err != nil {
 		if err.Error() == "user Code not found" {
-			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
-				log.Print(err)
-			}
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		} else {
-			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
-				log.Print(err)
-			}
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 			return
 		}
 	}
-	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("คิว %v ของท่านถูกยกเลิกแล้วครับ", queue.Code))).Do(); err != nil {
+	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("ขออภัย คิว %v ของท่านถูกยกเลิก", queue.Code))).Do(); err != nil {
 		log.Print(err)
 	}
-	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted"})
+	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
 }
 
 func (h queueHandler) ReportQueue(c *gin.Context) {

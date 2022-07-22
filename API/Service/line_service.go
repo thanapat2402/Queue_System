@@ -29,14 +29,22 @@ func (s queueService) GetQueueLine(code string) (*model.QueueResponseLine, error
 	return &qReponse, nil
 }
 
-func (s queueService) DeleteQueuebyUID(UserID string) error {
+func (s queueService) DeleteQueuebyUID(UserID string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.DeleteQueuebyUID(UserID)
 	if err != nil {
 		log.Println(err)
-		return errors.New("repository error")
+		return nil, errors.New("repository error")
+	} else {
+		qReponse := model.QueueResponse{
+			Code:   fmt.Sprintf("%v%03d", queue.Type, queue.Code),
+			Date:   queue.Date,
+			Name:   queue.Name,
+			Tel:    queue.Tel,
+			UserID: queue.UserID,
+		}
+		log.Printf("%v is cancle queue", queue.Name)
+		return &qReponse, nil
 	}
-	log.Printf("%v is cancle queue", queue.Name)
-	return nil
 }
 
 func (s queueService) AmountQueue(UserID string) (int, error) {
@@ -60,7 +68,6 @@ func (s queueService) AmountQueue(UserID string) (int, error) {
 	log.Printf("%v is check queue", User_queue.Name)
 	return wait, nil
 }
-
 
 func (s queueService) FlexQueue(UserCode string) (string, error) {
 	queue, err := s.GetQueueLine(UserCode)
@@ -217,10 +224,9 @@ func (s queueService) FlexQueue(UserCode string) (string, error) {
 		  ]
 		}
 	  }`, queue.UserCode, queue.Name, queue.Date.Format("Monday 2, 15:04:05"), wait, queue.UserCode)
-	
+
 	return flex, nil
 }
-
 
 // func pushmessage (userID string,message string){
 // 	bot, err := linebot.New(<channel secret>, <channel token>)

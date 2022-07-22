@@ -32,8 +32,23 @@ func (h queueHandler) Callback(c *gin.Context) {
 			case *linebot.TextMessage:
 				userIDs := "U75d559eb17b924479b63d01491314f48"
 				if message.Text == "ยกเลิกคิว" {
-					h.qService.DeleteQueuebyUID(event.Source.UserID)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ยกเลิกคิวเรียบร้อยแล้วครับ")).Do(); err != nil {
+					queue, err := h.qService.DeleteQueuebyUID(event.Source.UserID)
+					if err != nil {
+						if err.Error() == "user Code not found" {
+							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
+								log.Print(err)
+							}
+							c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+							return
+						} else {
+							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
+								log.Print(err)
+							}
+							c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+							return
+						}
+					}
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("ท่านยกเลิกคิว %v เรียบร้อยแล้วครับ", queue.Code))).Do(); err != nil {
 						log.Print(err)
 					}
 					return

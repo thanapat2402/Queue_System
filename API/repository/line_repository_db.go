@@ -27,7 +27,7 @@ func (r queueRepositoryDB) DeleteQueuebyUID(UserID string) (*model.QueueModel, e
 		return nil, result.Error
 	}
 	if result.RowsAffected == 0 {
-		return nil, errors.New("current Code not found")
+		return nil, errors.New("user Code not found")
 	}
 	r.db.Where("user_id", UserID).Delete(&queue)
 	return &queue, nil
