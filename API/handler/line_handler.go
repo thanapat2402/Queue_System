@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"q/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -30,7 +31,12 @@ func (h queueHandler) Callback(c *gin.Context) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				userIDs := "U75d559eb17b924479b63d01491314f48"
+				if message.Text == "test" {
+
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("test")).Do(); err != nil {
+						log.Print(err)
+					}
+				}
 				if message.Text == "ยกเลิกคิว" {
 					queue, err := h.qService.DeleteQueuebyUID(event.Source.UserID)
 					if err != nil {
@@ -38,21 +44,93 @@ func (h queueHandler) Callback(c *gin.Context) {
 							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
 								log.Print(err)
 							}
-							c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 							return
 						} else {
 							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
 								log.Print(err)
 							}
-							c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 							return
 						}
 					}
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("ท่านยกเลิกคิว %v เรียบร้อยแล้วครับ", queue.Code))).Do(); err != nil {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("ท่านยกเลิกคิว %v เรียบร้อยแล้ว", queue.Code))).Do(); err != nil {
 						log.Print(err)
 					}
 					return
 				}
+
+				if message.Text == "จองคิว" {
+					// Unmarshal JSON
+					flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(MenuFlex))
+					if err != nil {
+						log.Println(err)
+					}
+					fmt.Println(flexContainer)
+					// New Flex Message
+					flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
+					// Reply Message
+					_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
+					if err != nil {
+						log.Print(err)
+					}
+					return
+				}
+				if message.Text == "Alone" || message.Text == "Couple" || message.Text == "Small Group" || message.Text == "The Gang" || message.Text == "VVIP" {
+					var types string
+					switch message.Text {
+					case "Alone":
+						types = "A"
+					case "Couple":
+						types = "B"
+					case "Small Group":
+						types = "C"
+					case "The Gang":
+						types = "D"
+					case "VVIP":
+						types = "V"
+					default:
+						log.Println("This Type not in Conditions")
+					}
+					input := model.QueueInput{
+						Type: types,
+						// Name:   linebot.GetProfileCall()APIEndpointGetProfile,
+						UserID: event.Source.UserID,
+					}
+					queue, err := h.qService.AddQueue(input)
+					if err != nil {
+						if err.Error() == "queue already exists" {
+							if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("ท่านจองคิวไปแล้วกรุณายกเลิกคิวก่อนหน้า")).Do(); err != nil {
+								log.Print(err)
+							}
+							return
+						} else {
+							if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถบันทึกคิวได้")).Do(); err != nil {
+								log.Print(err)
+							}
+							return
+						}
+					}
+					if input.UserID != "" {
+						flex, err := h.qService.FlexQueue(queue.Code)
+						if err != nil {
+							c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+							return
+						}
+						// Unmarshal JSON
+						flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(flex))
+						if err != nil {
+							c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+							return
+						}
+						// New Flex Message
+						flexMessage := linebot.NewFlexMessage("Your Queue", flexContainer)
+						if _, err := bot.PushMessage(input.UserID, flexMessage).Do(); err != nil {
+							c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+							return
+						}
+					}
+					return
+				}
+
 				if message.Text == "ตรวจสอบคิว" {
 					wait, err := h.qService.AmountQueue(event.Source.UserID)
 					if err != nil {
@@ -74,6 +152,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 					return
 				}
 				if message.Text == "golf" {
+					userIDs := "U75d559eb17b924479b63d01491314f48"
 					if _, err := bot.PushMessage(userIDs, linebot.NewTextMessage("มีคนอยากเซ็ทหย่อสูดต่อซูดผ่อซีหม่อสองห่อใส่ไข่กับคุณ")).Do(); err != nil {
 						log.Print(err)
 					}

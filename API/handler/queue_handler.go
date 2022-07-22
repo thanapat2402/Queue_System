@@ -76,20 +76,20 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 	queue, err := h.qService.AddQueue(input)
 	if err != nil {
 		if err.Error() == "queue already exists" {
-			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านจองคิวไปแล้วกรุณายกเลิกคิวก่อนหน้า")).Do(); err != nil {
+			if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("ท่านจองคิวไปแล้วกรุณายกเลิกคิวก่อนหน้า")).Do(); err != nil {
 				log.Print(err)
 			}
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		} else {
-			if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถบันทึกคิวได้")).Do(); err != nil {
+			if _, err := bot.PushMessage(input.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถบันทึกคิวได้")).Do(); err != nil {
 				log.Print(err)
 			}
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 			return
 		}
 	}
-	if queue.UserID != "" {
+	if input.UserID != "" {
 		flex, err := h.qService.FlexQueue(queue.Code)
 		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
