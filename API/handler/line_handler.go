@@ -93,7 +93,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 
 					input := model.QueueInput{
 						Type:   types,
-						Name:   Getprofile().DisplayName,
+						Name:   Getprofile(event.Source.UserID).DisplayName,
 						UserID: event.Source.UserID,
 					}
 					queue, err := h.qService.AddQueue(input)
