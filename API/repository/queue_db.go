@@ -83,12 +83,10 @@ func (r queueRepositoryDB) DeleteQueue(strcode string) (*model.QueueModel, error
 
 func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
-	result := r.db.Where("user_id = ?", data.UserID).Find(&queue)
-	if result.Error != nil {
-		log.Println(result.Error)
-		return nil, result.Error
-	}
-	if result.RowsAffected == 0 {
+	var result *gorm.DB
+	log.Println(data.UserID)
+	if data.UserID == "" {
+		log.Printf("เข้าIF")
 		newCode := r.generateCode(data.Type)
 		date := time.Now()
 		Queue := model.QueueModel{
@@ -97,11 +95,31 @@ func (r queueRepositoryDB) CreateQueue(data model.QueueInput) (*model.QueueModel
 			Date:   date,
 			Name:   data.Name,
 			Tel:    data.Tel,
-			UserID: data.UserID}
+			UserID: ""}
 		r.db.Create(&Queue)
 		return &Queue, nil
+	} else {
+		log.Printf("เข้าElse")
+		result = r.db.Where("user_id = ?", data.UserID).Find(&queue)
+		if result.Error != nil {
+			log.Println(result.Error)
+			return nil, result.Error
+		}
+		if result.RowsAffected == 0 {
+			newCode := r.generateCode(data.Type)
+			date := time.Now()
+			Queue := model.QueueModel{
+				Code:   newCode,
+				Type:   data.Type,
+				Date:   date,
+				Name:   data.Name,
+				Tel:    data.Tel,
+				UserID: data.UserID}
+			r.db.Create(&Queue)
+			return &Queue, nil
+		}
+		return nil, errors.New("queue already exists")
 	}
-	return nil, errors.New("queue already exists")
 }
 
 func (r queueRepositoryDB) generateCode(genre string) (NewCode int) {

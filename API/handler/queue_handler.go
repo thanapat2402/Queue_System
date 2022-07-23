@@ -89,6 +89,7 @@ func (h queueHandler) AddQueue(c *gin.Context) {
 			return
 		}
 	}
+	log.Println(input.UserID)
 	if input.UserID != "" {
 		flex, err := h.qService.FlexQueue(queue.Code)
 		if err != nil {
