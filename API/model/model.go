@@ -54,3 +54,11 @@ type ReportQueue struct {
 	CurrentqueueC string `gorm:"size:2"`
 	CurrentqueueD string `gorm:"size:2"`
 }
+
+type LineProfile struct{
+	UserID string
+	DisplayName string
+	PicUrl string
+	Status string
+	Language string
+}

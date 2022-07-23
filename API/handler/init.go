@@ -69,24 +69,25 @@ func ConnectDatabase() (db *gorm.DB) {
 	return database
 }
 
-func GetBot() (bot *linebot.Client) {
+func Readline() (secret string, token string) {
 	if os.Getenv("CHANNEL_SECRET") == "" {
 		secret := viper.GetString("line.CHANNEL_SECRET")
 		token := viper.GetString("line.CHANNEL_TOKEN")
-		bot, err := linebot.New(secret, token)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return bot
+		return secret, token
 	} else {
 		secret := os.Getenv("CHANNEL_SECRET")
 		token := os.Getenv("CHANNEL_TOKEN")
-		bot, err := linebot.New(secret, token)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return bot
+		return secret, token
 	}
+}
+
+func GetBot() (bot *linebot.Client) {
+	secret, token := Readline()
+	bot, err := linebot.New(secret, token)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return bot
 }
 
 func initConfig() {

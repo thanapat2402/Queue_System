@@ -90,9 +90,10 @@ func (h queueHandler) Callback(c *gin.Context) {
 					default:
 						log.Println("This Type not in Conditions")
 					}
+
 					input := model.QueueInput{
-						Type: types,
-						// Name:   linebot.GetProfileCall()APIEndpointGetProfile,
+						Type:   types,
+						Name:   Getprofile().DisplayName,
 						UserID: event.Source.UserID,
 					}
 					queue, err := h.qService.AddQueue(input)
