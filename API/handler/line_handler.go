@@ -17,7 +17,6 @@ func (h queueHandler) Hello(c *gin.Context) {
 func (h queueHandler) Callback(c *gin.Context) {
 	bot := GetBot()
 	events, err := bot.ParseRequest(c.Request)
-	fmt.Println(err)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.Writer.WriteHeader(400)
@@ -27,7 +26,6 @@ func (h queueHandler) Callback(c *gin.Context) {
 		return
 	}
 	for _, event := range events {
-		fmt.Println(event.Source.UserID)
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
@@ -41,12 +39,12 @@ func (h queueHandler) Callback(c *gin.Context) {
 					queue, err := h.qService.DeleteQueuebyUID(event.Source.UserID)
 					if err != nil {
 						if err.Error() == "user Code not found" {
-							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
+							if _, err := bot.PushMessage(event.Source.UserID, linebot.NewTextMessage("ท่านยังไม่ได้จองคิวไม่สามารถยกเลิกได้")).Do(); err != nil {
 								log.Print(err)
 							}
 							return
 						} else {
-							if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
+							if _, err := bot.PushMessage(event.Source.UserID, linebot.NewTextMessage("เกิดข้อผิดพลาดไม่สามารถยกเลิกคิวได้")).Do(); err != nil {
 								log.Print(err)
 							}
 							return

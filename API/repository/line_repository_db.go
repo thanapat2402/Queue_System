@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"log"
 	"q/model"
 	// "gorm.io/gorm"
 )
@@ -22,7 +21,6 @@ func (r queueRepositoryDB) GetCurrentQueue(types string) (*model.QueueModel, err
 func (r queueRepositoryDB) DeleteQueuebyUID(UserID string) (*model.QueueModel, error) {
 	queue := model.QueueModel{}
 	result := r.db.Order("Date").Where("user_id = ?", UserID).Find(&queue)
-	log.Println(&queue)
 	if result.Error != nil {
 		return nil, result.Error
 	}

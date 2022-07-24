@@ -32,6 +32,9 @@ func (s queueService) GetQueueLine(code string) (*model.QueueResponseLine, error
 func (s queueService) DeleteQueuebyUID(UserID string) (*model.QueueResponse, error) {
 	queue, err := s.queueRepo.DeleteQueuebyUID(UserID)
 	if err != nil {
+		if err.Error() == "user Code not found" {
+			return nil, err
+		}
 		log.Println(err)
 		return nil, errors.New("repository error")
 	} else {
