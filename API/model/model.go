@@ -37,9 +37,8 @@ type QueuesResponse struct {
 }
 
 type QueueResponseLine struct {
-	CurrentCode string `gorm:"size:5"`
 	UserCode    string `gorm:"size:5"`
-	QueueAmount int    `gorm:"size:5"`
+	QueueAmount string `gorm:"size:15"`
 	Date        time.Time
 	Name        string `gorm:"size:30"`
 }

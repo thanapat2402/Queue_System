@@ -64,9 +64,9 @@ func (r *queueServiceMock) CheckQueue(UserID string) (string, error) {
 	return args.Get(0).(string), args.Error(1)
 }
 
-func (r *queueServiceMock) AmountQueue(UserID string) (int, error) {
+func (r *queueServiceMock) AmountQueue(UserID string) (string, error) {
 	args := r.Called(UserID)
-	return args.Get(0).(int), args.Error(1)
+	return args.Get(0).(string), args.Error(1)
 }
 
 func (s *queueServiceMock) ReportQueue() (*model.ReportQueue, error) {

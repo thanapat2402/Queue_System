@@ -18,6 +18,6 @@ type QueueService interface {
 	GetQueueLine(Code string) (*model.QueueResponseLine, error)
 	DeleteQueuebyUID(UserID string) (*model.QueueResponse, error)
 	FlexQueue(UserCode string) (string, error)
-	AmountQueue(UserID string) (int, error)
+	AmountQueue(UserID string) (string, error)
 	FlexReportQueue() (string, error)
 }

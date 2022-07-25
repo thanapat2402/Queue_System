@@ -159,18 +159,13 @@ func (h queueHandler) Callback(c *gin.Context) {
 							log.Print(err)
 						}
 					}
-					var messagequeue string
-					if wait == 0 {
-						messagequeue = "ถึงคิวของคุณแล้ว"
-					} else {
-						messagequeue = fmt.Sprintf("กรุณารออีก %v คิว", wait)
-					}
 
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(messagequeue)).Do(); err != nil {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(wait)).Do(); err != nil {
 						log.Print(err)
 					}
 					return
 				}
+
 				if message.Text == "golf" {
 					userIDs := "U75d559eb17b924479b63d01491314f48"
 					if _, err := bot.PushMessage(userIDs, linebot.NewTextMessage("มีคนอยากเซ็ทหย่อสูดต่อซูดผ่อซีหม่อสองห่อใส่ไข่กับคุณ")).Do(); err != nil {
@@ -181,6 +176,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 						return
 					}
 				}
+
 				flex, err := h.qService.FlexQueue(message.Text)
 				fmt.Println(err)
 				if err != nil {

@@ -8,22 +8,35 @@ import (
 )
 
 func (s queueService) GetQueueLine(code string) (*model.QueueResponseLine, error) {
-	queue, err := s.queueRepo.GetQueuesByCode(code)
+	User_queue, err := s.queueRepo.GetQueuesByCode(code)
 	if err != nil {
 		log.Println(err)
 		return nil, errors.New("repository error")
 	}
-	current, err := s.queueRepo.GetCurrentQueue(queue.Type)
+	queues, err := s.queueRepo.GetQueuesByType(User_queue.Type)
 	if err != nil {
 		log.Println(err)
 		return nil, errors.New("repository error")
+	}
+	count := 0
+	var wait string
+	for _, queue := range queues {
+		if queue.Code < User_queue.Code {
+			count += 1
+		}
+	}
+	if count == 1 {
+		wait = "Waiting a queue"
+	} else if count > 1 {
+		wait = fmt.Sprintf("Waiting %v queues", count)
+	} else if count == 0 {
+		wait = "It's your turn"
 	}
 	qReponse := model.QueueResponseLine{
-		CurrentCode: fmt.Sprintf("%v%03d", current.Type, current.Code),
-		UserCode:    fmt.Sprintf("%v%03d", queue.Type, queue.Code),
-		QueueAmount: queue.Code - current.Code,
-		Date:        queue.Date,
-		Name:        queue.Name,
+		UserCode:    fmt.Sprintf("%v%03d", User_queue.Type, User_queue.Code),
+		QueueAmount: wait,
+		Date:        User_queue.Date,
+		Name:        User_queue.Name,
 	}
 	fmt.Println(qReponse)
 	return &qReponse, nil
@@ -50,23 +63,31 @@ func (s queueService) DeleteQueuebyUID(UserID string) (*model.QueueResponse, err
 	}
 }
 
-func (s queueService) AmountQueue(UserID string) (int, error) {
+func (s queueService) AmountQueue(UserID string) (string, error) {
 
 	User_queue, err := s.queueRepo.GetQueueByUserID(UserID)
 	if err != nil {
 		log.Println(err)
-		return 99999, errors.New("repository error")
+		return "", errors.New("repository error")
 	}
 	queues, err := s.queueRepo.GetQueuesByType(User_queue.Type)
 	if err != nil {
 		log.Println(err)
-		return 99999, errors.New("repository error")
+		return "", errors.New("repository error")
 	}
-	wait := 0
+	count := 0
+	var wait string
 	for _, queue := range queues {
 		if queue.Code < User_queue.Code {
-			wait += 1
+			count += 1
 		}
+	}
+	if count == 1 {
+		wait = "Waiting a queue"
+	} else if count > 1 {
+		wait = fmt.Sprintf("Waiting %v queues", count)
+	} else if count == 0 {
+		wait = "It's your turn"
 	}
 	log.Printf("%v is check queue", User_queue.Name)
 	return wait, nil
@@ -74,21 +95,14 @@ func (s queueService) AmountQueue(UserID string) (int, error) {
 
 func (s queueService) FlexQueue(UserCode string) (string, error) {
 	queue, err := s.GetQueueLine(UserCode)
+	// queue, err := s.GetQueue(UserCode)
 	if err != nil {
 		return "", err
-	}
-	var wait string
-	if queue.QueueAmount == 1 {
-		wait = "Waiting a queue"
-	} else if queue.QueueAmount > 1 {
-		wait = fmt.Sprintf("Waiting %v queues", queue.QueueAmount)
-	} else if queue.QueueAmount == 0 {
-		wait = "It's your turn"
 	}
 	if queue.Name == "" {
 		queue.Name = "ไม่ระบุชื่อ"
 	}
-	flex := fmt.Sprintf(QueueFlex, queue.UserCode, queue.Name, queue.Date.Format("Monday 2, 15:04:05"), wait, queue.UserCode)
+	flex := fmt.Sprintf(QueueFlex, queue.UserCode, queue.Name, queue.Date.Format("Monday 2, 15:04:05"), queue.QueueAmount, queue.UserCode)
 
 	return flex, nil
 }
