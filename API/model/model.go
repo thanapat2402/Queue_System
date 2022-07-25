@@ -45,20 +45,20 @@ type QueueResponseLine struct {
 }
 
 type ReportQueue struct {
-	AmountQueueA  int    `gorm:"size:5"`
-	AmountQueueB  int    `gorm:"size:5"`
-	AmountQueueC  int    `gorm:"size:5"`
-	AmountQueueD  int    `gorm:"size:5"`
+	AmountQueueA  string `gorm:"size:5"`
+	AmountQueueB  string `gorm:"size:5"`
+	AmountQueueC  string `gorm:"size:5"`
+	AmountQueueD  string `gorm:"size:5"`
 	CurrentqueueA string `gorm:"size:2"`
 	CurrentqueueB string `gorm:"size:2"`
 	CurrentqueueC string `gorm:"size:2"`
 	CurrentqueueD string `gorm:"size:2"`
 }
 
-type LineProfile struct{
-	UserID string
+type LineProfile struct {
+	UserID      string
 	DisplayName string
-	PicUrl string
-	Status string
-	Language string
+	PicUrl      string
+	Status      string
+	Language    string
 }

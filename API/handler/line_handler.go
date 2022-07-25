@@ -130,7 +130,28 @@ func (h queueHandler) Callback(c *gin.Context) {
 					return
 				}
 
-				if message.Text == "ตรวจสอบคิว" {
+				if message.Text == "ตรวจสอบคิวทั้งหมด" {
+					ReportFlex, err := h.qService.FlexReportQueue()
+					if err != nil {
+						log.Println(err)
+					}
+					// Unmarshal JSON
+					flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(ReportFlex))
+					if err != nil {
+						log.Println(err)
+					}
+					fmt.Println(flexContainer)
+					// New Flex Message
+					flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
+					// Reply Message
+					_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
+					if err != nil {
+						log.Print(err)
+					}
+					return
+				}
+
+				if message.Text == "ตรวจสอบคิวของฉัน" {
 					wait, err := h.qService.AmountQueue(event.Source.UserID)
 					if err != nil {
 						log.Println(err)

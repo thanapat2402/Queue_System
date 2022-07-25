@@ -73,3 +73,8 @@ func (s *queueServiceMock) ReportQueue() (*model.ReportQueue, error) {
 	args := s.Called()
 	return args.Get(0).(*model.ReportQueue), args.Error(1)
 }
+
+func (s *queueServiceMock) FlexReportQueue() (string, error) {
+	args := s.Called()
+	return args.Get(0).(string), args.Error(1)
+}

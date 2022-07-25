@@ -93,6 +93,15 @@ func (s queueService) FlexQueue(UserCode string) (string, error) {
 	return flex, nil
 }
 
+func (s queueService) FlexReportQueue() (string, error) {
+	report, err := s.ReportQueue()
+	if err != nil {
+		return "", err
+	}
+	flex := fmt.Sprintf(ReportFlex, report.CurrentqueueA, report.AmountQueueA, report.CurrentqueueB, report.AmountQueueB, report.CurrentqueueC, report.AmountQueueC, report.CurrentqueueD, report.AmountQueueD)
+	return flex, nil
+}
+
 // func pushmessage (userID string,message string){
 // 	bot, err := linebot.New(<channel secret>, <channel token>)
 // 	if err != nil {

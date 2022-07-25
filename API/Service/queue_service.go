@@ -124,10 +124,10 @@ func (s queueService) DeQueue(code string) (*model.QueueResponse, error) {
 		return nil, ErrRepository
 	} else {
 		qReponse := model.QueueResponse{
-			Code: fmt.Sprintf("%v%03d", queue.Type, queue.Code),
-			Date: queue.Date,
-			Name: queue.Name,
-			Tel:  queue.Tel,
+			Code:   fmt.Sprintf("%v%03d", queue.Type, queue.Code),
+			Date:   queue.Date,
+			Name:   queue.Name,
+			Tel:    queue.Tel,
 			UserID: queue.UserID,
 		}
 		return &qReponse, nil
@@ -159,30 +159,41 @@ func (s queueService) ReportQueue() (*model.ReportQueue, error) {
 
 	var currentA, currentB, currentC, currentD string
 	if a == nil {
-		currentA = "no queue type A"
+		currentA = "no queue"
 	} else {
 		currentA = a[0].Code
 	}
 	if b == nil {
-		currentB = "no queue type B"
+		currentB = "no queue"
 	} else {
 		currentB = b[0].Code
 	}
 	if c == nil {
-		currentC = "no queue type C"
+		currentC = "no queue"
 	} else {
 		currentC = c[0].Code
 	}
 	if d == nil {
-		currentD = "no queue type D"
+		currentD = "no queue"
 	} else {
 		currentD = d[0].Code
 	}
+	list := []int{len(a), len(b), len(c), len(d)}
+	Amount := []string{}
+	for _, i := range list {
+		if i == 0 {
+			Amount = append(Amount, "don't wait")
+		} else if i == 1 {
+			Amount = append(Amount, "a queue")
+		} else {
+			Amount = append(Amount, fmt.Sprintf("%v queues", i))
+		}
+	}
 	qReport := model.ReportQueue{
-		AmountQueueA:  len(a),
-		AmountQueueB:  len(b),
-		AmountQueueC:  len(c),
-		AmountQueueD:  len(d),
+		AmountQueueA:  Amount[0],
+		AmountQueueB:  Amount[1],
+		AmountQueueC:  Amount[2],
+		AmountQueueD:  Amount[3],
 		CurrentqueueA: currentA,
 		CurrentqueueB: currentB,
 		CurrentqueueC: currentC,
