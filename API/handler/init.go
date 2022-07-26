@@ -71,6 +71,18 @@ func GetBot() (bot *linebot.Client) {
 	return bot
 }
 
+func ReadMenu() (rid1 string, rid2 string) {
+	if os.Getenv("CHANNEL_SECRET") == "" {
+		rid1 := viper.GetString("richmenu.RID1")
+		rid2 := viper.GetString("richmenu.RID2")
+		return rid1, rid2
+	} else {
+		rid1 := os.Getenv("RID1")
+		rid2 := os.Getenv("RID2")
+		return rid1, rid2
+	}
+}
+
 func initConfig() {
 	//set Read form config.yaml
 	viper.SetConfigName("config")

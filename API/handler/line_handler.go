@@ -27,6 +27,20 @@ func (h queueHandler) Callback(c *gin.Context) {
 		return
 	}
 	for _, event := range events {
+		if event.Type == linebot.EventTypePostback {
+			data := event.Postback.Data
+			rid1, rid2 := ReadMenu()
+			switch data {
+			case "Richmenu1":
+				if _, err = bot.LinkUserRichMenu(event.Source.UserID, rid1).Do(); err != nil {
+					log.Fatal(err)
+				}
+			case "Richmenu2":
+				if _, err = bot.LinkUserRichMenu(event.Source.UserID, rid2).Do(); err != nil {
+					log.Fatal(err)
+				}
+			}
+		}
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
@@ -180,6 +194,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 
 				split := strings.Split(message.Text, " ")
 				if split[0] == "ดู" || split[0] == "ตรวจสอบ" || split[0] == "ค้นหา" {
+					fmt.Println(split[1])
 					flex, err := h.qService.FlexQueue(split[1])
 					fmt.Println(err)
 					if err != nil {
@@ -203,7 +218,7 @@ func (h queueHandler) Callback(c *gin.Context) {
 						log.Println(err)
 					}
 					// New Flex Message
-					flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
+					flexMessage := linebot.NewFlexMessage(split[1], flexContainer)
 					// Reply Message
 					_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
 					if err != nil {
