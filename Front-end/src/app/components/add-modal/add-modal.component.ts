@@ -71,10 +71,5 @@ export class AddModalComponent implements OnInit {
       });
     this.queueForm.setValue({ type: '', tel: '', name: '' });
     this.modalService.dismissAll();
-    // let createdCode = '';
-    // console.log(code);
-    // createdCode = this.createQueue(code);
-    // this.modalService.dismissAll();
-    // this.viewDetail.getQueue(createdCode);
   }
 }

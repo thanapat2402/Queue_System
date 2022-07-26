@@ -1,1 +1,38 @@
-<p>web-customer works!</p>
+<div class="container container-fluid pt-3">
+  <div class="nav navbar navbar-light justify-content-between d-flex">
+    <a href="/">
+      <img
+        class="logo navbar-brand"
+        src="https://www.i-pic.info/i/kI2g196318.png"
+      />
+    </a>
+  </div>
+  <hr />
+  <table class="table table-responsive table-strip text-center fw-bold">
+    <thead>
+      <tr>
+        <th>Table Type</th>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
+        <th>D</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Current Queue</td>
+        <td>{{ this.totalQueue.CurrentQueueA }}</td>
+        <td>{{ this.totalQueue.CurrentQueueB }}</td>
+        <td>{{ this.totalQueue.CurrentQueueC }}</td>
+        <td>{{ this.totalQueue.CurrentQueueD }}</td>
+      </tr>
+      <tr>
+        <td>Waiting</td>
+        <td>{{ this.totalQueue.AmountQueueA }}</td>
+        <td>{{ this.totalQueue.AmountQueueB }}</td>
+        <td>{{ this.totalQueue.AmountQueueC }}</td>
+        <td>{{ this.totalQueue.AmountQueueD }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

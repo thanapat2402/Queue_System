@@ -38,7 +38,7 @@
         </div>
       </div>
       <button
-        class="btn btn-outline-success ms-3"
+        class="btn btn-outline-success mx-3"
         #popupbtn
         id="popupbtn"
         (click)="open()"
@@ -79,8 +79,12 @@
         <td>{{ getTimeString(item.Date) }}</td>
         <td>
           <button
-            class="btn btn-outline-success bi bi-clipboard-check me-3"
+            class="btn btn-outline-primary bi bi-clipboard-check me-3"
             (click)="showData(item.Code)"
+          ></button>
+          <button
+            class="btn btn-outline-success bi bi-check-circle me-3"
+            (click)="acceptQueue(item.Code)"
           ></button>
           <button
             class="btn btn-outline-danger bi bi-x"
