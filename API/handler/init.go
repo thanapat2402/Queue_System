@@ -17,26 +17,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// func ConnectDatabase() (db *gorm.DB) {
-
-// 	//Set Data source name
-// 	dsn := fmt.Sprintf("server=%v\\%v;Database=%v;praseTime=true",
-// 		viper.GetString("db.server"),
-// 		viper.GetString("db.driver"),
-// 		viper.GetString("db.database"),
-// 	)
-// 	dial := sqlserver.Open(dsn)
-
-// 	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
-
-// 	if err != nil {
-// 		panic("Failed to connect to database!")
-// 	}
-// 	//auto migration
-// 	database.AutoMigrate(&model.QueueModel{})
-// 	return database
-// }
-
 func ConnectDatabase() (db *gorm.DB) {
 
 	//Set Data source name
@@ -58,6 +38,7 @@ func ConnectDatabase() (db *gorm.DB) {
 	}
 
 	dial := mysql.Open(dsn)
+	// 	dial := sqlserver.Open(dsn)
 
 	database, err := gorm.Open(dial, &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 

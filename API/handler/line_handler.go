@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"q/model"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -177,41 +178,42 @@ func (h queueHandler) Callback(c *gin.Context) {
 					}
 				}
 
-				flex, err := h.qService.FlexQueue(message.Text)
-				fmt.Println(err)
-				if err != nil {
-					if err.Error() == "repository error" {
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ไม่พบเลขคิวที่คุณค้นหาหรืออาจเลยคิวของคุณมาแล้ว")).Do(); err != nil {
-							log.Print(err)
+				split := strings.Split(message.Text, " ")
+				if split[0] == "ดู" || split[0] == "ตรวจสอบ" || split[0] == "ค้นหา" {
+					flex, err := h.qService.FlexQueue(split[1])
+					fmt.Println(err)
+					if err != nil {
+						if err.Error() == "repository error" {
+							if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ไม่พบเลขคิวที่คุณค้นหาหรืออาจเลยคิวของคุณมาแล้ว")).Do(); err != nil {
+								log.Print(err)
+								return
+							}
+							return
+						} else {
+							if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ระบบผิดพลาด")).Do(); err != nil {
+								log.Print(err)
+								return
+							}
 							return
 						}
-						return
-					} else {
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ระบบผิดพลาด")).Do(); err != nil {
-							log.Print(err)
-							return
-						}
-						return
+					}
+					// Unmarshal JSON
+					flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(flex))
+					if err != nil {
+						log.Println(err)
+					}
+					// New Flex Message
+					flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
+					// Reply Message
+					_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
+					if err != nil {
+						log.Print(err)
+					}
+				} else {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ขออภัยครับ แต่เรายังไม่เข้าใจ ท่านอยากจะทวนอีกรอบหรือส่งต่อให้เจ้าหน้าที่ตอบคำถามดีครับ")).Do(); err != nil {
+						log.Print(err)
 					}
 				}
-				// Unmarshal JSON
-				flexContainer, err := linebot.UnmarshalFlexMessageJSON([]byte(flex))
-				if err != nil {
-					log.Println(err)
-				}
-				// New Flex Message
-				flexMessage := linebot.NewFlexMessage(message.Text, flexContainer)
-				// Reply Message
-				_, err = bot.ReplyMessage(event.ReplyToken, flexMessage).Do()
-				if err != nil {
-					log.Print(err)
-				}
-
-				// } else {
-				// 	if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-				// 		log.Print(err)
-				// 	}
-				// }
 			}
 		}
 	}
