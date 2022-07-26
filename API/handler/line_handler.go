@@ -30,16 +30,18 @@ func (h queueHandler) Callback(c *gin.Context) {
 		if event.Type == linebot.EventTypePostback {
 			data := event.Postback.Data
 			rid1, rid2 := ReadMenu()
+			fmt.Println(data)
 			switch data {
-			case "Richmenu1":
+			case "RichMenu1":
 				if _, err = bot.LinkUserRichMenu(event.Source.UserID, rid1).Do(); err != nil {
 					log.Fatal(err)
 				}
-			case "Richmenu2":
+			case "RichMenu2":
 				if _, err = bot.LinkUserRichMenu(event.Source.UserID, rid2).Do(); err != nil {
 					log.Fatal(err)
 				}
 			}
+			return
 		}
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
