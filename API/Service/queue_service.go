@@ -194,10 +194,10 @@ func (s queueService) ReportQueue() (*model.ReportQueue, error) {
 		AmountQueueB:  Amount[1],
 		AmountQueueC:  Amount[2],
 		AmountQueueD:  Amount[3],
-		CurrentqueueA: currentA,
-		CurrentqueueB: currentB,
-		CurrentqueueC: currentC,
-		CurrentqueueD: currentD,
+		CurrentQueueA: currentA,
+		CurrentQueueB: currentB,
+		CurrentQueueC: currentC,
+		CurrentQueueD: currentD,
 	}
 
 	return &qReport, nil

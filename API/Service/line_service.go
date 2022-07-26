@@ -112,7 +112,7 @@ func (s queueService) FlexReportQueue() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	flex := fmt.Sprintf(ReportFlex, report.CurrentqueueA, report.AmountQueueA, report.CurrentqueueB, report.AmountQueueB, report.CurrentqueueC, report.AmountQueueC, report.CurrentqueueD, report.AmountQueueD)
+	flex := fmt.Sprintf(ReportFlex, report.CurrentQueueA, report.AmountQueueA, report.CurrentQueueB, report.AmountQueueB, report.CurrentQueueC, report.AmountQueueC, report.CurrentQueueD, report.AmountQueueD)
 	return flex, nil
 }
 

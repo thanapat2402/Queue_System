@@ -48,10 +48,10 @@ type ReportQueue struct {
 	AmountQueueB  string `gorm:"size:5"`
 	AmountQueueC  string `gorm:"size:5"`
 	AmountQueueD  string `gorm:"size:5"`
-	CurrentqueueA string `gorm:"size:2"`
-	CurrentqueueB string `gorm:"size:2"`
-	CurrentqueueC string `gorm:"size:2"`
-	CurrentqueueD string `gorm:"size:2"`
+	CurrentQueueA string `gorm:"size:2"`
+	CurrentQueueB string `gorm:"size:2"`
+	CurrentQueueC string `gorm:"size:2"`
+	CurrentQueueD string `gorm:"size:2"`
 }
 
 type LineProfile struct {
