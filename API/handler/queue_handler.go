@@ -139,6 +139,24 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
 }
 
+func (h queueHandler) DeQueue2(c *gin.Context) {
+	bot := GetBot()
+	queue, err := h.qService.DeQueue(c.Param("Code"))
+	if err != nil {
+		if err.Error() == "user Code not found" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		} else {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+	}
+	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("คิว %v เข้ารับบริการแล้ว", queue.Code))).Do(); err != nil {
+		log.Print(err)
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
+}
+
 func (h queueHandler) ReportQueue(c *gin.Context) {
 	report, err := h.qService.ReportQueue()
 	if err != nil {

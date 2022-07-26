@@ -34,6 +34,7 @@ func main() {
 		web.GET("/search", queueHandler.SearchQueue)
 		web.POST("/", queueHandler.AddQueue)
 		web.DELETE("/:Code", queueHandler.DeQueue)
+		web.DELETE("/Accept/:Code", queueHandler.DeQueue2)
 	}
 
 	line := route.Group("/api/v1/line")
