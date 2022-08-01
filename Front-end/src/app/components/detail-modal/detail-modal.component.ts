@@ -39,7 +39,6 @@ export class DetailModalComponent implements OnInit {
       this.tempData = result.data;
     });
     this.open();
-    //console.log(this.getDateTime(this.tempData.timeStamp));
   }
 
   getDateTime(input: string): DateAndTime {

@@ -45,4 +45,10 @@ export class MasterService {
     this.subscribeInstant = this.http.delete(`${environment.baseApi}${code}`);
     return this.subscribeInstant;
   }
+  acceptQueue(code: string): Observable<HttpResult<Queue[]>> {
+    this.subscribeInstant = this.http.delete(
+      `${environment.baseApi}Accept/${code}`
+    );
+    return this.subscribeInstant;
+  }
 }

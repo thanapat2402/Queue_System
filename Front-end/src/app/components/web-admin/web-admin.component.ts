@@ -14,6 +14,7 @@ import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 export class WebAdminComponent implements OnInit {
   //dataList = MOCKUP;
   private updateSubscription!: Subscription;
+  selectedType: string = '';
   dataList: any = [];
   tempData: PostQueue = { type: '', name: '', tel: '' };
   saveResponse: any;
@@ -21,9 +22,9 @@ export class WebAdminComponent implements OnInit {
   @ViewChild(DetailModalComponent) viewDetail!: DetailModalComponent;
   @ViewChild(AddModalComponent) addQueue!: AddModalComponent;
   constructor(private service: MasterService) {
-    this.getQueues();
+    this.getQueues(this.selectedType);
     this.service.RefreshRequired.subscribe((result) => {
-      this.getQueues();
+      this.getQueues(this.selectedType);
     });
   }
 
@@ -34,12 +35,14 @@ export class WebAdminComponent implements OnInit {
   getQueues(code?: string) {
     console.log(code);
     if (code) {
+      this.selectedType = code;
       this.service.getQueues(code).subscribe((result) => {
         console.log(result);
         this.dataList = result.data;
         console.log(this.dataList);
       });
-    } else {
+    } else if (code == '' || code == undefined) {
+      this.selectedType = '';
       this.service.getQueues().subscribe((result) => {
         console.log(result);
         this.dataList = result.data;
@@ -54,7 +57,19 @@ export class WebAdminComponent implements OnInit {
         if (result.message === 'Deleted') {
           console.log(result.data);
           alert(`${code} has been deleted`);
-          this.getQueues();
+          this.getQueues(this.selectedType);
+        }
+      });
+    }
+  }
+  acceptQueue(code: string) {
+    if (confirm(`Do you want to dequeue ${code}?`)) {
+      this.service.acceptQueue(code).subscribe((result) => {
+        console.log(result);
+        if (result.message === 'Deleted') {
+          console.log(result.data);
+          alert(`${code} has been reserved`);
+          this.getQueues(this.selectedType);
         }
       });
     }
@@ -70,15 +85,13 @@ export class WebAdminComponent implements OnInit {
         console.log(result);
       });
     });
-    this.getQueues();
-    // this.dataList.forEach((item: any) => {
-    //   this.deQueue(item.Code)
-    // };
+    this.clearList(this.dataList);
+    this.getQueues(this.selectedType);
   }
   open() {
     this.addQueue.open();
     this.clearList(this.dataList);
-    this.getQueues();
+    this.getQueues(this.selectedType);
   }
   getTimeString(date: string) {
     return new Date(date).toLocaleTimeString('th');
@@ -96,7 +109,9 @@ export class WebAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateSubscription = interval(1000).subscribe((val) => this.getQueues);
-    // this.getQueues();
+    this.updateSubscription = interval(10 * 1000).subscribe((val) =>
+      this.getQueues(this.selectedType)
+    );
+    this.getQueues(this.selectedType);
   }
 }
