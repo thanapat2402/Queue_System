@@ -136,7 +136,7 @@ func (h queueHandler) DeQueue(c *gin.Context) {
 	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("ขออภัย คิว %v ของท่านถูกยกเลิก", queue.Code))).Do(); err != nil {
 		log.Print(err)
 	}
-	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
+	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
 }
 
 func (h queueHandler) DeQueue2(c *gin.Context) {
@@ -154,7 +154,7 @@ func (h queueHandler) DeQueue2(c *gin.Context) {
 	if _, err := bot.PushMessage(queue.UserID, linebot.NewTextMessage(fmt.Sprintf("คิว %v เข้ารับบริการแล้ว", queue.Code))).Do(); err != nil {
 		log.Print(err)
 	}
-	c.JSON(http.StatusCreated, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
+	c.JSON(http.StatusOK, gin.H{"data": queue, "message": "Deleted", "context": fmt.Sprintf("Queue %v Deleted by Admin", queue.Code)})
 }
 
 func (h queueHandler) ReportQueue(c *gin.Context) {

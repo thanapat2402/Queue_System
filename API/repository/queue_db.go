@@ -134,3 +134,5 @@ func (r queueRepositoryDB) generateCode(genre string) (NewCode int) {
 	NewCode = 1
 	return NewCode
 }
+
+
